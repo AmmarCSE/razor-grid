@@ -28,5 +28,12 @@ namespace RazorGrid.Controllers
 
             return View();
         }
+
+        public ActionResult Grid()
+        {
+            ViewBag.Message = "Grid";
+
+            return View();
+        }
     }
 }
