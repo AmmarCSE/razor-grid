@@ -16,50 +16,13 @@ namespace System.Web.Mvc.Html
     //     Represents support for the HTML label element in an ASP.NET MVC view.
     public static class GridExtensions
     {
-        public static MvcHtmlString NewTextBoxFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, GridModel instance)
+        public static MvcHtmlString NewTextBoxFor<TModel, TGridModel>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, List<TGridModel>>> expression)
         {
-            GridModel lm = instance;
-            PropertyInfo t1 = typeof(TModel).GetProperty("UserName");
-            PropertyInfo t2 = lm.GetType().GetProperty("UserName");
-            IList<PropertyInfo> props = ExtractGridModelProperties<TProperty>();
+            IList<PropertyInfo> modelProperties = RazorGridHelper.ExtractGridModelProperties<TGridModel>();
 
-            IList<Expression<Func<TModel, object>>> expressions = GenerateExpressions<TModel>(props, lm);
+            IList<Expression<Func<TGridModel, object>>> expressions = RazorGridHelper.GenerateExpressions<TGridModel>(modelProperties);
 
-            return BuildGridBody<TModel>(htmlHelper, expressions);
-        }
-
-        public static IList<PropertyInfo> ExtractGridModelProperties<TProperty>()
-        {
-            Type myType = typeof(TProperty).GetProperty("Item").PropertyType;
-            return new List<PropertyInfo>(myType.GetProperties());
-        }
-
-        public static IList<Expression<Func<TModel, object>>> GenerateExpressions<TModel>(IList<PropertyInfo> properties, object lm)
-        {
-            IList<Expression<Func<TModel, object>>> expressions = new List<Expression<Func<TModel, object>>>();
-            foreach (var property in properties)
-            {
-                ParameterExpression fieldName = Expression.Parameter(typeof(object), property.Name);
-                Expression fieldExpr = Expression.PropertyOrField(Expression.Constant(lm), property.Name);
-                Expression<Func<TModel, object>> exp = Expression.Lambda<Func<TModel, object>>(fieldExpr, fieldName);
-
-                expressions.Add(exp);
-            } 
-            
-            return expressions;
-        }
-        
-        public static MvcHtmlString BuildGridBody<TModel>(this HtmlHelper<TModel> htmlHelper, IList<Expression<Func<TModel, object>>> expressions)
-        {
-            MvcHtmlString gridBody = new MvcHtmlString(String.Empty);
-            StringBuilder builder = new StringBuilder();
-
-            foreach (var expression in expressions)
-            {
-                builder.Append(htmlHelper.TextBoxFor(expression).ToString());
-            }
-
-            return MvcHtmlString.Create(builder.ToString());
+            return RazorGridHelper.BuildGridBody<TModel>(htmlHelper, expressions);
         }
     }
 }
