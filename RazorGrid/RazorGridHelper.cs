@@ -18,28 +18,26 @@ namespace System.Web.Mvc.Html
     {
         public static IList<PropertyInfo> ExtractGridModelProperties<TGridModel>()
         {
-            //Type myType = .GetProperty("Item").PropertyType;
             return new List<PropertyInfo>(typeof(TGridModel).GetProperties());
         }
 
-        public static IList<Expression<Func<TGridModel, object>>> GenerateExpressions<TGridModel>(IList<PropertyInfo> properties)
+        public static IList<Expression<Func<TGridModel, object>>> GenerateExpressions<TGridModel>(IList<PropertyInfo> properties, object lm)
         {
             IList<Expression<Func<TGridModel, object>>> expressions = new List<Expression<Func<TGridModel, object>>>();
             foreach (var property in properties)
             {
-                //Expression fieldExpr = Expression.PropertyOrField(Expression.Parameter(typeof(string).GetProperty("Item").PropertyType, "o"), property.Name);
-                //ParameterExpression fieldName = Expression.Parameter(typeof(string).GetProperty("Item").PropertyType, property.Name);
                 ParameterExpression fieldName = Expression.Parameter(typeof(TGridModel), "i");
                 MemberExpression fieldExpr = Expression.Property(fieldName, property.Name);
-                Expression<Func<TGridModel, object>> expression = Expression.Lambda<Func<TGridModel, object>>(fieldExpr, fieldName);
+                //Expression fieldExpr1 = Expression.Convert(fieldExpr, typeof(object));
+                Expression<Func<TGridModel, object>> exp = Expression.Lambda<Func<TGridModel, object>>(fieldExpr, fieldName);
 
-                expressions.Add(expression);
-            } 
-            
+                expressions.Add(exp);
+            }
+
             return expressions;
         }
-        
-        public static MvcHtmlString BuildGridBody<TModel>(this HtmlHelper<TModel> htmlHelper, IList<Expression<Func<TModel, object>>> expressions)
+
+        public static MvcHtmlString BuildGridBody<TGridModel>(this HtmlHelper<TGridModel> htmlHelper, IList<Expression<Func<TGridModel, object>>> expressions)
         {
             MvcHtmlString gridBody = new MvcHtmlString(String.Empty);
             StringBuilder builder = new StringBuilder();

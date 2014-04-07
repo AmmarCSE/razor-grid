@@ -83,7 +83,7 @@ namespace RazorGrid.Models
         public string Password { get; set; }
 
         [Display(Name = "Remember me?")]
-        public string RememberMe { get; set; }
+        public bool RememberMe { get; set; }
     }
 
     public class GridModelList
@@ -92,8 +92,8 @@ namespace RazorGrid.Models
 
         public GridModelList()
         {
-            Data.Add(new GridModel() {UserName = "UserName", Password = "Password", RememberMe = "RememberMe" });
-            Data.Add(new GridModel() {UserName = "UserName", Password = "Password", RememberMe = "RememberMe" });
+            Data.Add(new GridModel() {UserName = "UserName", Password = "Password", RememberMe = false });
+            Data.Add(new GridModel() {UserName = "UserName", Password = "Password", RememberMe = false });
         }
     }
 

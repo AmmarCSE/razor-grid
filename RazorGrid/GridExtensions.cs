@@ -20,9 +20,10 @@ namespace System.Web.Mvc.Html
         {
             IList<PropertyInfo> modelProperties = RazorGridHelper.ExtractGridModelProperties<TGridModel>();
 
-            IList<Expression<Func<TGridModel, object>>> expressions = RazorGridHelper.GenerateExpressions<TGridModel>(modelProperties);
-
-            return RazorGridHelper.BuildGridBody<TModel>(htmlHelper, expressions);
+            GridModel lm = new GridModel();
+            IList<Expression<Func<TGridModel, object>>> expressions = RazorGridHelper.GenerateExpressions<TGridModel>(modelProperties, lm);
+            HtmlHelper<TGridModel> ht = new HtmlHelper<TGridModel>(htmlHelper.ViewContext, htmlHelper.ViewDataContainer);
+            return RazorGridHelper.BuildGridBody<TGridModel>(ht, expressions);
         }
     }
 }
