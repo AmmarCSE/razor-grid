@@ -16,16 +16,16 @@ namespace System.Web.Mvc.Html
     //     Represents support for the HTML label element in an ASP.NET MVC view.
     public static class GridExtensions
     {
-        public static MvcHtmlString NewTextBoxFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, object instance)
+        public static MvcHtmlString NewTextBoxFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, GridModel instance)
         {
-            
-            object lm = instance;
-            lm = lm.GetType();//.GetProperties();
+            GridModel lm = instance;
+            PropertyInfo t1 = typeof(TModel).GetProperty("UserName");
+            PropertyInfo t2 = lm.GetType().GetProperty("UserName");
             IList<PropertyInfo> props = ExtractGridModelProperties<TProperty>();
 
-            IList<Expression<Func<TModel, object>>> exps = GenerateExpressions<TModel>(props, lm);
+            IList<Expression<Func<TModel, object>>> expressions = GenerateExpressions<TModel>(props, lm);
 
-            return htmlHelper.TextBoxFor(exps[0]);
+            return BuildGridBody<TModel>(htmlHelper, expressions);
         }
 
         public static IList<PropertyInfo> ExtractGridModelProperties<TProperty>()
@@ -47,6 +47,19 @@ namespace System.Web.Mvc.Html
             } 
             
             return expressions;
+        }
+        
+        public static MvcHtmlString BuildGridBody<TModel>(this HtmlHelper<TModel> htmlHelper, IList<Expression<Func<TModel, object>>> expressions)
+        {
+            MvcHtmlString gridBody = new MvcHtmlString(String.Empty);
+            StringBuilder builder = new StringBuilder();
+
+            foreach (var expression in expressions)
+            {
+                builder.Append(htmlHelper.TextBoxFor(expression).ToString());
+            }
+
+            return MvcHtmlString.Create(builder.ToString());
         }
     }
 }

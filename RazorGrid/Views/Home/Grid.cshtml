@@ -19,7 +19,7 @@
         <ol>
             <li>
                 @*@Html.LabelFor(m => m.UserName)*@
-                @Html.NewTextBoxFor(m => m.self, new RazorGrid.Models.GridModelList())
+                @Html.NewTextBoxFor(m => m.GridModels, new RazorGrid.Models.GridModel())
                 @*@Html.TextBoxFor(m => m.UserName)*@
                 @*@Html.ValidationMessageFor(m => m.UserName)*@
             </li>
@@ -41,10 +41,6 @@
 }
 </section>
 
-<section class="social" id="socialLoginForm">
-    <h2>Use another service to log in.</h2>
-    @Html.Action("ExternalLoginsList", new { ReturnUrl = ViewBag.ReturnUrl })
-</section>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
