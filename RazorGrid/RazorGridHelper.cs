@@ -21,22 +21,24 @@ namespace System.Web.Mvc.Html
             return new List<PropertyInfo>(typeof(TGridModel).GetProperties());
         }
 
-        public static IList<Expression<Func<TModel, object>>> GenerateExpressions<TModel>(IList<PropertyInfo> properties)
+        public static IList<Expression<Func<TModel, object>>> GenerateExpressions<TModel, TGridModel>(IList<PropertyInfo> properties, IList<TGridModel> data)
         {
             IList<Expression<Func<TModel, object>>> expressions = new List<Expression<Func<TModel, object>>>();
-            foreach (var property in properties)
+            for (int i = 0; i < data.Count; i++)
             {
-                ParameterExpression fieldName = Expression.Parameter(typeof(TModel), "m");
+                foreach (var property in properties)
+                {
+                    ParameterExpression fieldName = Expression.Parameter(typeof(TModel), "m");
 
-                var dataListExpr = Expression.Property(fieldName, "Data");
-                var itemExpr = Expression.Property(dataListExpr, "Item", Expression.Constant(0));
-                var propertyExpr = Expression.Property(itemExpr, property.Name);
-                //Expression fieldExpr1 = Expression.Convert(fieldExpr, typeof(object));
-                Expression<Func<TModel, object>> exp = Expression.Lambda<Func<TModel, object>>(propertyExpr, fieldName);
+                    var dataListExpr = Expression.Property(fieldName, "Data");
+                    var itemExpr = Expression.Property(dataListExpr, "Item", Expression.Constant(i));
+                    var propertyExpr = Expression.Property(itemExpr, property.Name);
+                    //Expression fieldExpr1 = Expression.Convert(fieldExpr, typeof(object));
+                    Expression<Func<TModel, object>> exp = Expression.Lambda<Func<TModel, object>>(propertyExpr, fieldName);
 
-                expressions.Add(exp);
+                    expressions.Add(exp);
+                }
             }
-
             return expressions;
         }
 

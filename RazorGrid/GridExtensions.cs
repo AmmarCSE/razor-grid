@@ -19,8 +19,9 @@ namespace System.Web.Mvc.Html
         public static MvcHtmlString NewTextBoxFor<TModel, TGridModel>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, List<TGridModel>>> expression)
         {
             IList<PropertyInfo> modelProperties = RazorGridHelper.ExtractGridModelProperties<TGridModel>();
-            List<GridModel> data = ((GridModelList)htmlHelper.ViewData.ModelMetadata.Model).Data;
-            IList<Expression<Func<TModel, object>>> expressions = RazorGridHelper.GenerateExpressions<TModel>(modelProperties);
+            ModelMetadata metadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
+            IList<TGridModel> data = (IList<TGridModel>) metadata.Model;
+            IList<Expression<Func<TModel, object>>> expressions = RazorGridHelper.GenerateExpressions<TModel, TGridModel>(modelProperties, data);
             //HtmlHelper<GridModel> ht = new HtmlHelper<GridModel>(htmlHelper.ViewContext, htmlHelper.ViewDataContainer);
             return RazorGridHelper.BuildGridBody<TModel>(htmlHelper, expressions);
         }

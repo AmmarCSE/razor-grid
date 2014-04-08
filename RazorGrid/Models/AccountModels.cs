@@ -93,8 +93,8 @@ namespace RazorGrid.Models
         public GridModelList()
         {
             Data = new List<GridModel>();
-            Data.Add(new GridModel() {UserName = "UserName", Password = "Password", RememberMe = "false" });
-            Data.Add(new GridModel() {UserName = "UserName", Password = "Password", RememberMe = "false" });
+            Data.Add(new GridModel() {UserName = "1", Password = "2", RememberMe = "3" });
+            Data.Add(new GridModel() {UserName = "4", Password = "5", RememberMe = "6" });
         }
     }
 
