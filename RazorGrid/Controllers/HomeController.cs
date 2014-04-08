@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RazorGrid.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -33,7 +34,7 @@ namespace RazorGrid.Controllers
         {
             ViewBag.Message = "Grid";
 
-            return View();
+            return View(new GridModelList());
         }
     }
 }

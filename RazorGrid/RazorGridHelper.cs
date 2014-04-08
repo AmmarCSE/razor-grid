@@ -21,15 +21,18 @@ namespace System.Web.Mvc.Html
             return new List<PropertyInfo>(typeof(TGridModel).GetProperties());
         }
 
-        public static IList<Expression<Func<TGridModel, object>>> GenerateExpressions<TGridModel>(IList<PropertyInfo> properties, object lm)
+        public static IList<Expression<Func<TModel, object>>> GenerateExpressions<TModel>(IList<PropertyInfo> properties)
         {
-            IList<Expression<Func<TGridModel, object>>> expressions = new List<Expression<Func<TGridModel, object>>>();
+            IList<Expression<Func<TModel, object>>> expressions = new List<Expression<Func<TModel, object>>>();
             foreach (var property in properties)
             {
-                ParameterExpression fieldName = Expression.Parameter(typeof(TGridModel), "i");
-                MemberExpression fieldExpr = Expression.Property(fieldName, property.Name);
+                ParameterExpression fieldName = Expression.Parameter(typeof(TModel), "m");
+
+                var dataListExpr = Expression.Property(fieldName, "Data");
+                var itemExpr = Expression.Property(dataListExpr, "Item", Expression.Constant(0));
+                var propertyExpr = Expression.Property(itemExpr, property.Name);
                 //Expression fieldExpr1 = Expression.Convert(fieldExpr, typeof(object));
-                Expression<Func<TGridModel, object>> exp = Expression.Lambda<Func<TGridModel, object>>(fieldExpr, fieldName);
+                Expression<Func<TModel, object>> exp = Expression.Lambda<Func<TModel, object>>(propertyExpr, fieldName);
 
                 expressions.Add(exp);
             }
