@@ -30,11 +30,8 @@ namespace System.Web.Mvc.Html
         {
             //IList<TGridModel> data = (IList<TGridModel>) metadata.Model;
 
-            IList<PropertyInfo> modelProperties = GridPropertyHelper.ExtractGridModelProperties<TGridModel>();
-            ModelMetadata metadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
-            IList<Expression<Func<TModel, object>>> expressions = GridPropertyHelper.GenerateExpressions<TModel, TGridModel>(modelProperties, ((IList<TGridModel>) metadata.Model).Count);
 
-            return GridBuilder.BuildGrid(htmlHelper, expressions);
+            return GridBuilder.BuildGrid(htmlHelper, expression);
         }
     }
 }

@@ -16,9 +16,44 @@ namespace System.Web.Mvc.Html
     //     Represents support for the HTML label element in an ASP.NET MVC view.
     public static class GridBuilder
     {
-        public static MvcHtmlString BuildGrid<TModel>(this HtmlHelper<TModel> htmlHelper, IList<Expression<Func<TModel, object>>> expressions)
+        public static MvcHtmlString BuildGrid<TModel, TGridModel>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, List<TGridModel>>> gridExpression)
         {
-            MvcHtmlString gridBody = new MvcHtmlString(String.Empty);
+            ModelMetadata metadata = ModelMetadata.FromLambdaExpression(gridExpression, htmlHelper.ViewData);
+            
+            IList<PropertyInfo> modelProperties = GridPropertyHelper.ExtractGridModelProperties<TGridModel>();
+
+            IList<Expression<Func<TModel, object>>> gridHeaderExpressions = 
+                GridExpressionHelper.GenerateHeaderExpressions<TModel>(modelProperties);
+            IList<Expression<Func<TModel, object>>> gridBodyExpressions = 
+                GridExpressionHelper.GenerateBodyExpressions<TModel, TGridModel>(modelProperties, ((IList<TGridModel>) metadata.Model).Count);
+
+            IList<string> gridSections = new List<string>();
+            gridSections.Add(htmlHelper.ConstructHeaders(gridHeaderExpressions));
+            gridSections.Add(htmlHelper.ConstructBody(gridBodyExpressions));
+
+            StringBuilder builder = new StringBuilder();
+            foreach (var section in gridSections)
+            {
+                builder.Append(section);
+            }
+
+            return MvcHtmlString.Create(builder.ToString());
+        }
+
+        private static string ConstructHeaders<TModel>(this HtmlHelper<TModel> htmlHelper, IList<Expression<Func<TModel, object>>> expressions)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            foreach (var expression in expressions)
+            {
+                builder.Append(htmlHelper.LabelFor(expression).ToString());
+            }
+
+            return builder.ToString();
+        }
+
+        private static string ConstructBody<TModel>(this HtmlHelper<TModel> htmlHelper, IList<Expression<Func<TModel, object>>> expressions)
+        {
             StringBuilder builder = new StringBuilder();
 
             foreach (var expression in expressions)
@@ -26,7 +61,7 @@ namespace System.Web.Mvc.Html
                 builder.Append(htmlHelper.TextBoxFor(expression).ToString());
             }
 
-            return MvcHtmlString.Create(builder.ToString());
+            return builder.ToString();
         }
     }
 }

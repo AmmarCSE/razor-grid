@@ -180,6 +180,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="GridExpressionHelper.cs" />
     <Compile Include="GridBuilder.cs" />
     <Compile Include="GridPropertyHelper.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
