@@ -16,14 +16,25 @@ namespace System.Web.Mvc.Html
     //     Represents support for the HTML label element in an ASP.NET MVC view.
     public static class GridExtensions
     {
-        public static MvcHtmlString NewTextBoxFor<TModel, TGridModel>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, List<TGridModel>>> expression)
+        public static MvcHtmlString GridFor<TModel, TGridModel>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, List<TGridModel>>> expression)
         {
-            IList<PropertyInfo> modelProperties = RazorGridHelper.ExtractGridModelProperties<TGridModel>();
+            return htmlHelper.GridFor(expression, isReadonly: false);
+        }
+
+        public static MvcHtmlString GridFor<TModel, TGridModel>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, List<TGridModel>>> expression, bool isReadonly)
+        {
+            return htmlHelper.GridHelper(expression);
+        }
+
+        private static MvcHtmlString GridHelper<TModel, TGridModel>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, List<TGridModel>>> expression)
+        {
+            //IList<TGridModel> data = (IList<TGridModel>) metadata.Model;
+
+            IList<PropertyInfo> modelProperties = GridPropertyHelper.ExtractGridModelProperties<TGridModel>();
             ModelMetadata metadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
-            IList<TGridModel> data = (IList<TGridModel>) metadata.Model;
-            IList<Expression<Func<TModel, object>>> expressions = RazorGridHelper.GenerateExpressions<TModel, TGridModel>(modelProperties, data);
-            //HtmlHelper<GridModel> ht = new HtmlHelper<GridModel>(htmlHelper.ViewContext, htmlHelper.ViewDataContainer);
-            return RazorGridHelper.BuildGridBody<TModel>(htmlHelper, expressions);
+            IList<Expression<Func<TModel, object>>> expressions = GridPropertyHelper.GenerateExpressions<TModel, TGridModel>(modelProperties, ((IList<TGridModel>) metadata.Model).Count);
+
+            return GridBuilder.BuildGrid(htmlHelper, expressions);
         }
     }
 }
