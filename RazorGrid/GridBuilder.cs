@@ -22,14 +22,9 @@ namespace System.Web.Mvc.Html
             
             IList<PropertyInfo> modelProperties = GridPropertyHelper.ExtractGridModelProperties<TGridModel>();
 
-            IList<Expression<Func<TModel, object>>> gridHeaderExpressions = 
-                GridExpressionHelper.GenerateHeaderExpressions<TModel>(modelProperties);
-            IList<Expression<Func<TModel, object>>> gridBodyExpressions = 
-                GridExpressionHelper.GenerateBodyExpressions<TModel, TGridModel>(modelProperties, ((IList<TGridModel>) metadata.Model).Count);
-
             IList<string> gridSections = new List<string>();
-            gridSections.Add(htmlHelper.ConstructHeaders(gridHeaderExpressions));
-            gridSections.Add(htmlHelper.ConstructBody(gridBodyExpressions));
+            gridSections.Add(htmlHelper.ConstructHeaders(modelProperties));
+            gridSections.Add(htmlHelper.ConstructBody(modelProperties, ((IList<TGridModel>) metadata.Model).Count));
 
             StringBuilder builder = new StringBuilder();
             foreach (var section in gridSections)
@@ -40,25 +35,52 @@ namespace System.Web.Mvc.Html
             return MvcHtmlString.Create(builder.ToString());
         }
 
-        private static string ConstructHeaders<TModel>(this HtmlHelper<TModel> htmlHelper, IList<Expression<Func<TModel, object>>> expressions)
+        private static string ConstructHeaders<TModel>(this HtmlHelper<TModel> htmlHelper, IList<PropertyInfo> properties)
         {
             StringBuilder builder = new StringBuilder();
 
-            foreach (var expression in expressions)
+            foreach (var property in properties)
             {
-                builder.Append(htmlHelper.LabelFor(expression).ToString());
+                TypeCode typeCode = Type.GetTypeCode(property.PropertyType);
+                MvcHtmlString mvcLabel = null;
+                switch (typeCode)
+                {
+                    case TypeCode.String:
+                        mvcLabel = htmlHelper.LabelFor(GridExpressionHelper.GenerateHeaderExpression<TModel, string>(property));
+                        break;
+                    case TypeCode.Int32:
+                        mvcLabel = htmlHelper.LabelFor(GridExpressionHelper.GenerateHeaderExpression<TModel, int>(property));
+                        break;
+                }
+
+                builder.Append(mvcLabel.ToString());
             }
 
             return builder.ToString();
         }
 
-        private static string ConstructBody<TModel>(this HtmlHelper<TModel> htmlHelper, IList<Expression<Func<TModel, object>>> expressions)
+        private static string ConstructBody<TModel>(this HtmlHelper<TModel> htmlHelper, IList<PropertyInfo> properties, int numRows)
         {
             StringBuilder builder = new StringBuilder();
 
-            foreach (var expression in expressions)
+            for (int i = 0; i < numRows; i++)
             {
-                builder.Append(htmlHelper.TextBoxFor(expression).ToString());
+                foreach (var property in properties)
+                {
+                    TypeCode typeCode = Type.GetTypeCode(property.PropertyType);
+                    MvcHtmlString mvcLabel = null;
+                    switch (typeCode)
+                    {
+                        case TypeCode.String:
+                            mvcLabel = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateBodyExpression<TModel, string>(property, i));
+                            break;
+                        case TypeCode.Int32:
+                            mvcLabel = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateBodyExpression<TModel, int>(property, i));
+                            break;
+                    }
+
+                    builder.Append(mvcLabel.ToString());
+                }
             }
 
             return builder.ToString();

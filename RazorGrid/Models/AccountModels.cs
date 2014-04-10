@@ -74,16 +74,15 @@ namespace RazorGrid.Models
     public class GridModel
     {
         [Required]
-        [Display(Name = "User name")]
-        public string UserName { get; set; }
+        [Display(Name = "Name")]
+        public string Name { get; set; }
 
         [Required]
-        [DataType(DataType.Password)]
-        [Display(Name = "Password")]
-        public string Password { get; set; }
+        [Display(Name = "Address")]
+        public string Address { get; set; }
 
-        [Display(Name = "Remember me?")]
-        public string RememberMe { get; set; }
+        [Display(Name = "Age")]
+        public int Age { get; set; }
     }
 
     public class GridModelList
@@ -93,8 +92,8 @@ namespace RazorGrid.Models
         public GridModelList()
         {
             Data = new List<GridModel>();
-            Data.Add(new GridModel() {UserName = "1", Password = "2", RememberMe = "3" });
-            Data.Add(new GridModel() {UserName = "4", Password = "5", RememberMe = "6" });
+            Data.Add(new GridModel() {Name = "1", Address = "2", Age = 3 });
+            Data.Add(new GridModel() {Name = "4", Address = "5", Age = 6 });
         }
     }
 

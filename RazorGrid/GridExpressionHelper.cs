@@ -16,45 +16,26 @@ namespace System.Web.Mvc.Html
     //     Represents support for the HTML label element in an ASP.NET MVC view.
     public static class GridExpressionHelper
     {
-        public static IList<Expression<Func<TModel, object>>> GenerateHeaderExpressions<TModel>(IList<PropertyInfo> properties)
+        public static Expression<Func<TModel, TProperty>> GenerateHeaderExpression<TModel, TProperty>(PropertyInfo property)
         {
-            IList<Expression<Func<TModel, object>>> expressions = new List<Expression<Func<TModel, object>>>();
+            ParameterExpression fieldName = Expression.Parameter(typeof(TModel), "m");
 
-            foreach (var property in properties)
-            {
-                ParameterExpression fieldName = Expression.Parameter(typeof(TModel), "m");
+            var dataListExpr = Expression.Property(fieldName, "Data");
+            var itemExpr = Expression.Property(dataListExpr, "Item");
+            var propertyExpr = Expression.Property(itemExpr, property.Name);
 
-                var dataListExpr = Expression.Property(fieldName, "Data");
-                var itemExpr = Expression.Property(dataListExpr, "Item");
-                var propertyExpr = Expression.Property(itemExpr, property.Name);
-
-                Expression<Func<TModel, object>> exp = Expression.Lambda<Func<TModel, object>>(propertyExpr, fieldName);
-
-                expressions.Add(exp);
-            }
-
-            return expressions;
+            return Expression.Lambda<Func<TModel, TProperty>>(propertyExpr, fieldName);
         }
 
-        public static List<Expression<Func<TModel, object>>> GenerateBodyExpressions<TModel, TGridModel>(IList<PropertyInfo> properties, int dataLength)
+        public static Expression<Func<TModel, TProperty>> GenerateBodyExpression<TModel, TProperty>(PropertyInfo property, int rowIndex)
         {
-            List<Expression<Func<TModel, object>>> expressions = new List<Expression<Func<TModel, object>>>();
-            for (int i = 0; i < dataLength; i++)
-            {
-                foreach (var property in properties)
-                {
-                    ParameterExpression fieldName = Expression.Parameter(typeof(TModel), "m");
+            ParameterExpression fieldName = Expression.Parameter(typeof(TModel), "m");
 
-                    var dataListExpr = Expression.Property(fieldName, "Data");
-                    var itemExpr = Expression.Property(dataListExpr, "Item", Expression.Constant(i));
-                    var propertyExpr = Expression.Property(itemExpr, property.Name);
+            var dataListExpr = Expression.Property(fieldName, "Data");
+            var itemExpr = Expression.Property(dataListExpr, "Item", Expression.Constant(rowIndex));
+            var propertyExpr = Expression.Property(itemExpr, property.Name);
 
-                    Expression<Func<TModel, object>> exp = Expression.Lambda<Func<TModel, object>>(propertyExpr, fieldName);
-
-                    expressions.Add(exp);
-                }
-            }
-            return expressions;
+            return Expression.Lambda<Func<TModel, TProperty>>(propertyExpr, fieldName);
         }
     }
 }
