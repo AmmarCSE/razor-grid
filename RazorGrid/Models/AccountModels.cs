@@ -90,6 +90,7 @@ namespace RazorGrid.Models
     {
         public List<GridModel> Data { get; set; }
         public List<GridEnums.GridPermission> gridPermissions { get; set; }
+        public Dictionary<GridEnums.GridPermission, string> gridActions { get; set; }
 
         public GridModelList()
         {
@@ -101,6 +102,9 @@ namespace RazorGrid.Models
             gridPermissions.Add(GridEnums.GridPermission.Add);
             gridPermissions.Add(GridEnums.GridPermission.Delete);
             gridPermissions.Add(GridEnums.GridPermission.Update_Activation);
+
+            gridActions = new Dictionary<GridEnums.GridPermission, string>();
+            gridActions.Add(GridEnums.GridPermission.Add, GridCustomScript.ACTION_REDIRECT("'google.com'"));
         }
     }
 

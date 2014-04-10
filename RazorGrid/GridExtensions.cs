@@ -18,17 +18,17 @@ namespace System.Web.Mvc.Html
     {
         public static MvcHtmlString GridFor<TModel, TGridModel>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, List<TGridModel>>> expression)
         {
-            return htmlHelper.GridFor(expression, gridPermissions: null);
+            return htmlHelper.GridFor(expression, gridPermissions: null, gridActions: null);
         }
 
-        public static MvcHtmlString GridFor<TModel, TGridModel>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, List<TGridModel>>> expression, List<GridEnums.GridPermission> gridPermissions)
+        public static MvcHtmlString GridFor<TModel, TGridModel>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, List<TGridModel>>> expression, List<GridEnums.GridPermission> gridPermissions, Dictionary<GridEnums.GridPermission, string> gridActions )
         {
-            return htmlHelper.GridHelper(expression, gridPermissions);
+            return htmlHelper.GridHelper(expression, gridPermissions, gridActions);
         }
 
-        private static MvcHtmlString GridHelper<TModel, TGridModel>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, List<TGridModel>>> expression, List<GridEnums.GridPermission> gridPermissions)
+        private static MvcHtmlString GridHelper<TModel, TGridModel>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, List<TGridModel>>> expression, List<GridEnums.GridPermission> gridPermissions, Dictionary<GridEnums.GridPermission, string> gridActions )
         {
-            return GridBuilder.BuildGrid(htmlHelper, expression, gridPermissions);
+            return GridBuilder.BuildGrid(htmlHelper, expression, gridPermissions, gridActions);
         }
     }
 }

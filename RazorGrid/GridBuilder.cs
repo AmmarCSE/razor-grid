@@ -16,7 +16,11 @@ namespace System.Web.Mvc.Html
     //     Represents support for the HTML label element in an ASP.NET MVC view.
     public static class GridBuilder
     {
-        public static MvcHtmlString BuildGrid<TModel, TGridModel>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, List<TGridModel>>> gridExpression, List<GridEnums.GridPermission> gridPermissions)
+        public static MvcHtmlString BuildGrid<TModel, TGridModel>(
+            this HtmlHelper<TModel> htmlHelper, 
+            Expression<Func<TModel, List<TGridModel>>> gridExpression, 
+            List<GridEnums.GridPermission> gridPermissions, 
+            Dictionary<GridEnums.GridPermission, string> gridActions)
         {
             ModelMetadata metadata = ModelMetadata.FromLambdaExpression(gridExpression, htmlHelper.ViewData);
             
@@ -24,10 +28,12 @@ namespace System.Web.Mvc.Html
 
             IList<string> gridSections = new List<string>();
 
-            gridSections.Add(ConstructActionBar(gridPermissions));
+            gridSections.Add(ConstructActionBar(gridPermissions, gridActions));
 
             gridSections.Add(htmlHelper.ConstructHeaders(modelProperties, gridPermissions));
             gridSections.Add(htmlHelper.ConstructBody(modelProperties, ((IList<TGridModel>) metadata.Model).Count, gridPermissions));
+
+            gridSections.Add(ConstructScripts(gridPermissions));
 
             StringBuilder builder = new StringBuilder();
             foreach (var section in gridSections)
@@ -38,7 +44,7 @@ namespace System.Web.Mvc.Html
             return MvcHtmlString.Create(builder.ToString());
         }
 
-        private static string ConstructActionBar(List<GridEnums.GridPermission> gridPermissions)
+        private static string ConstructActionBar(List<GridEnums.GridPermission> gridPermissions, Dictionary<GridEnums.GridPermission, string> gridActions)
         {
             StringBuilder builder = new StringBuilder();
 
@@ -55,7 +61,7 @@ namespace System.Web.Mvc.Html
 
             if (gridPermissions.Contains(GridEnums.GridPermission.Add))
             {
-                builder.Append(GridCustomElement.ADD_BUTTON);
+                builder.Append(GridCustomElement.ADD_BUTTON(gridActions[GridEnums.GridPermission.Add]));
             }
 
             return builder.ToString();
@@ -68,7 +74,7 @@ namespace System.Web.Mvc.Html
             if (gridPermissions.Contains(GridEnums.GridPermission.Delete) || 
                 gridPermissions.Contains(GridEnums.GridPermission.Update_Activation))
             {
-                builder.Append(htmlHelper.CheckBox("ToggleAll"));
+                builder.Append(htmlHelper.CheckBox("ToggleAll", new { onchange = GridCustomScript.CHECKBOX_TOGGLE("")}));
             }
 
             foreach (var property in properties)
@@ -101,7 +107,7 @@ namespace System.Web.Mvc.Html
                 if (gridPermissions.Contains(GridEnums.GridPermission.Delete) || 
                     gridPermissions.Contains(GridEnums.GridPermission.Update_Activation))
                 {
-                    builder.Append(htmlHelper.CheckBox("ToggleAll"));
+                    builder.Append(htmlHelper.CheckBox("GridRowCheckBox"));
                 }
 
                 foreach (var property in properties)
@@ -129,6 +135,24 @@ namespace System.Web.Mvc.Html
                 }
             }
 
+            return builder.ToString();
+        }
+
+        private static string ConstructScripts(List<GridEnums.GridPermission> gridPermissions)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            if (gridPermissions.Contains(GridEnums.GridPermission.Add) || 
+                gridPermissions.Contains(GridEnums.GridPermission.Edit))
+            {
+                builder.Append(GridCustomScript.ACTION_REDIRECT_FUNCTION);
+            }
+
+            if (gridPermissions.Contains(GridEnums.GridPermission.Delete) || 
+                gridPermissions.Contains(GridEnums.GridPermission.Update_Activation))
+            {
+                builder.Append(GridCustomScript.CHECKBOX_TOGGLE_FUNCTION);
+            }
             return builder.ToString();
         }
     }
