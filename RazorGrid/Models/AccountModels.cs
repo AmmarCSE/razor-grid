@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Globalization;
+using System.Web.Mvc.Html;
 using System.Web.Security;
 
 namespace RazorGrid.Models
@@ -88,12 +89,18 @@ namespace RazorGrid.Models
     public class GridModelList
     {
         public List<GridModel> Data { get; set; }
+        public List<GridEnums.GridPermission> gridPermissions { get; set; }
 
         public GridModelList()
         {
             Data = new List<GridModel>();
             Data.Add(new GridModel() {Name = "1", Address = "2", Age = 3 });
             Data.Add(new GridModel() {Name = "4", Address = "5", Age = 6 });
+
+            gridPermissions = new List<GridEnums.GridPermission>();
+            gridPermissions.Add(GridEnums.GridPermission.Add);
+            gridPermissions.Add(GridEnums.GridPermission.Delete);
+            gridPermissions.Add(GridEnums.GridPermission.Update_Activation);
         }
     }
 

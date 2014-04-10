@@ -2,13 +2,10 @@
 
 @{
     ViewBag.Title = "Log in";
+    Layout = null;
 }
 
-<hgroup class="title">
-    <h1>@ViewBag.Title.</h1>
-</hgroup>
-
-@Html.GridFor(m => m.Data)
+@Html.GridFor(m => m.Data, Model.gridPermissions)
 
 
 @section Scripts {

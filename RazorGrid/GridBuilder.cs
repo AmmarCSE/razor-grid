@@ -16,13 +16,16 @@ namespace System.Web.Mvc.Html
     //     Represents support for the HTML label element in an ASP.NET MVC view.
     public static class GridBuilder
     {
-        public static MvcHtmlString BuildGrid<TModel, TGridModel>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, List<TGridModel>>> gridExpression)
+        public static MvcHtmlString BuildGrid<TModel, TGridModel>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, List<TGridModel>>> gridExpression, List<GridEnums.GridPermission> gridPermissions)
         {
             ModelMetadata metadata = ModelMetadata.FromLambdaExpression(gridExpression, htmlHelper.ViewData);
             
             IList<PropertyInfo> modelProperties = GridPropertyHelper.ExtractGridModelProperties<TGridModel>();
 
             IList<string> gridSections = new List<string>();
+
+            gridSections.Add(ConstructActionBar(gridPermissions));
+
             gridSections.Add(htmlHelper.ConstructHeaders(modelProperties));
             gridSections.Add(htmlHelper.ConstructBody(modelProperties, ((IList<TGridModel>) metadata.Model).Count));
 
@@ -35,6 +38,29 @@ namespace System.Web.Mvc.Html
             return MvcHtmlString.Create(builder.ToString());
         }
 
+        private static string ConstructActionBar(List<GridEnums.GridPermission> gridPermissions)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            if (gridPermissions.Contains(GridEnums.GridPermission.Delete))
+            {
+                builder.Append(GridCustomElement.DELETE_ICON);
+            }
+
+            if (gridPermissions.Contains(GridEnums.GridPermission.Update_Activation))
+            {
+                builder.Append(GridCustomElement.ACTIVATE_ICON);
+                builder.Append(GridCustomElement.UNACTIVATE_ICON);
+            }
+
+            if (gridPermissions.Contains(GridEnums.GridPermission.Add))
+            {
+                builder.Append(GridCustomElement.ADD_BUTTON);
+            }
+
+            return builder.ToString();
+        }
+
         private static string ConstructHeaders<TModel>(this HtmlHelper<TModel> htmlHelper, IList<PropertyInfo> properties)
         {
             StringBuilder builder = new StringBuilder();
@@ -42,7 +68,9 @@ namespace System.Web.Mvc.Html
             foreach (var property in properties)
             {
                 TypeCode typeCode = Type.GetTypeCode(property.PropertyType);
+
                 MvcHtmlString mvcLabel = null;
+
                 switch (typeCode)
                 {
                     case TypeCode.String:
@@ -52,7 +80,6 @@ namespace System.Web.Mvc.Html
                         mvcLabel = htmlHelper.LabelFor(GridExpressionHelper.GenerateHeaderExpression<TModel, int>(property));
                         break;
                 }
-
                 builder.Append(mvcLabel.ToString());
             }
 
@@ -68,7 +95,9 @@ namespace System.Web.Mvc.Html
                 foreach (var property in properties)
                 {
                     TypeCode typeCode = Type.GetTypeCode(property.PropertyType);
+
                     MvcHtmlString mvcLabel = null;
+                    
                     switch (typeCode)
                     {
                         case TypeCode.String:
@@ -78,7 +107,6 @@ namespace System.Web.Mvc.Html
                             mvcLabel = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateBodyExpression<TModel, int>(property, i));
                             break;
                     }
-
                     builder.Append(mvcLabel.ToString());
                 }
             }

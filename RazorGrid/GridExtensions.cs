@@ -18,20 +18,17 @@ namespace System.Web.Mvc.Html
     {
         public static MvcHtmlString GridFor<TModel, TGridModel>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, List<TGridModel>>> expression)
         {
-            return htmlHelper.GridFor(expression, isReadonly: false);
+            return htmlHelper.GridFor(expression, gridPermissions: null);
         }
 
-        public static MvcHtmlString GridFor<TModel, TGridModel>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, List<TGridModel>>> expression, bool isReadonly)
+        public static MvcHtmlString GridFor<TModel, TGridModel>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, List<TGridModel>>> expression, List<GridEnums.GridPermission> gridPermissions)
         {
-            return htmlHelper.GridHelper(expression);
+            return htmlHelper.GridHelper(expression, gridPermissions);
         }
 
-        private static MvcHtmlString GridHelper<TModel, TGridModel>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, List<TGridModel>>> expression)
+        private static MvcHtmlString GridHelper<TModel, TGridModel>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, List<TGridModel>>> expression, List<GridEnums.GridPermission> gridPermissions)
         {
-            //IList<TGridModel> data = (IList<TGridModel>) metadata.Model;
-
-
-            return GridBuilder.BuildGrid(htmlHelper, expression);
+            return GridBuilder.BuildGrid(htmlHelper, expression, gridPermissions);
         }
     }
 }
