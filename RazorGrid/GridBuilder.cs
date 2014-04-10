@@ -26,8 +26,8 @@ namespace System.Web.Mvc.Html
 
             gridSections.Add(ConstructActionBar(gridPermissions));
 
-            gridSections.Add(htmlHelper.ConstructHeaders(modelProperties));
-            gridSections.Add(htmlHelper.ConstructBody(modelProperties, ((IList<TGridModel>) metadata.Model).Count));
+            gridSections.Add(htmlHelper.ConstructHeaders(modelProperties, gridPermissions));
+            gridSections.Add(htmlHelper.ConstructBody(modelProperties, ((IList<TGridModel>) metadata.Model).Count, gridPermissions));
 
             StringBuilder builder = new StringBuilder();
             foreach (var section in gridSections)
@@ -61,9 +61,15 @@ namespace System.Web.Mvc.Html
             return builder.ToString();
         }
 
-        private static string ConstructHeaders<TModel>(this HtmlHelper<TModel> htmlHelper, IList<PropertyInfo> properties)
+        private static string ConstructHeaders<TModel>(this HtmlHelper<TModel> htmlHelper, IList<PropertyInfo> properties, List<GridEnums.GridPermission> gridPermissions)
         {
             StringBuilder builder = new StringBuilder();
+
+            if (gridPermissions.Contains(GridEnums.GridPermission.Delete) || 
+                gridPermissions.Contains(GridEnums.GridPermission.Update_Activation))
+            {
+                builder.Append(htmlHelper.CheckBox("ToggleAll"));
+            }
 
             foreach (var property in properties)
             {
@@ -86,12 +92,18 @@ namespace System.Web.Mvc.Html
             return builder.ToString();
         }
 
-        private static string ConstructBody<TModel>(this HtmlHelper<TModel> htmlHelper, IList<PropertyInfo> properties, int numRows)
+        private static string ConstructBody<TModel>(this HtmlHelper<TModel> htmlHelper, IList<PropertyInfo> properties, int numRows, List<GridEnums.GridPermission> gridPermissions)
         {
             StringBuilder builder = new StringBuilder();
 
             for (int i = 0; i < numRows; i++)
             {
+                if (gridPermissions.Contains(GridEnums.GridPermission.Delete) || 
+                    gridPermissions.Contains(GridEnums.GridPermission.Update_Activation))
+                {
+                    builder.Append(htmlHelper.CheckBox("ToggleAll"));
+                }
+
                 foreach (var property in properties)
                 {
                     TypeCode typeCode = Type.GetTypeCode(property.PropertyType);
@@ -108,6 +120,12 @@ namespace System.Web.Mvc.Html
                             break;
                     }
                     builder.Append(mvcLabel.ToString());
+                }
+
+                if (gridPermissions.Contains(GridEnums.GridPermission.Delete) || 
+                    gridPermissions.Contains(GridEnums.GridPermission.Edit))
+                {
+                    builder.Append(GridCustomElement.DELETE_ICON);
                 }
             }
 
