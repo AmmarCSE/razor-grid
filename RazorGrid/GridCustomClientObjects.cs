@@ -32,7 +32,7 @@ namespace System.Web.Mvc.Html
             return string.Format("GridActionRedirect({0})", Url);
         }
 
-        public static string CHECKBOX_TOGGLE_FUNCTION = "<script>function ToggleGridCheckBoxes(GridId){$('#' + GridId).find('[name=\"GridRowCheckBox\"]').prop('checked', $('[name=\"ToggleAll\"]').prop('checked'))}</script>";
+        public static string CHECKBOX_TOGGLE_FUNCTION = "<script>function ToggleGridCheckBoxes(GridId){console.log(GridId);$('body').find('[name=\"GridRowCheckBox\"]').prop('checked', $('[name=\"ToggleAll\"]').prop('checked'))}</script>";
 
         public static string CHECKBOX_TOGGLE(string Url)
         {

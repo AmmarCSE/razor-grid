@@ -74,7 +74,7 @@ namespace System.Web.Mvc.Html
             if (gridPermissions.Contains(GridEnums.GridPermission.Delete) || 
                 gridPermissions.Contains(GridEnums.GridPermission.Update_Activation))
             {
-                builder.Append(htmlHelper.CheckBox("ToggleAll", new { onchange = GridCustomScript.CHECKBOX_TOGGLE("")}));
+                builder.Append(htmlHelper.CheckBox("ToggleAll", new { onchange = GridCustomScript.CHECKBOX_TOGGLE("$(this)")}));
             }
 
             foreach (var property in properties)
@@ -82,20 +82,18 @@ namespace System.Web.Mvc.Html
                 TypeCode typeCode = Type.GetTypeCode(property.PropertyType);
 
                 MvcHtmlString mvcLabel = null;
-
-                switch (typeCode)
-                {
-                    case TypeCode.String:
+                switch (typeCode) { case TypeCode.String:
                         mvcLabel = htmlHelper.LabelFor(GridExpressionHelper.GenerateHeaderExpression<TModel, string>(property));
                         break;
                     case TypeCode.Int32:
                         mvcLabel = htmlHelper.LabelFor(GridExpressionHelper.GenerateHeaderExpression<TModel, int>(property));
                         break;
                 }
-                builder.Append(mvcLabel.ToString());
+                string header = WrapInElement("div", mvcLabel.ToString());
+                builder.Append(header);
             }
 
-            return builder.ToString();
+            return WrapInElement("div", builder.ToString());
         }
 
         private static string ConstructBody<TModel>(this HtmlHelper<TModel> htmlHelper, IList<PropertyInfo> properties, int numRows, List<GridEnums.GridPermission> gridPermissions)
@@ -114,18 +112,18 @@ namespace System.Web.Mvc.Html
                 {
                     TypeCode typeCode = Type.GetTypeCode(property.PropertyType);
 
-                    MvcHtmlString mvcLabel = null;
+                    MvcHtmlString mvcTextBox = null;
                     
                     switch (typeCode)
                     {
                         case TypeCode.String:
-                            mvcLabel = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateBodyExpression<TModel, string>(property, i));
+                            mvcTextBox = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateBodyExpression<TModel, string>(property, i));
                             break;
                         case TypeCode.Int32:
-                            mvcLabel = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateBodyExpression<TModel, int>(property, i));
+                            mvcTextBox = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateBodyExpression<TModel, int>(property, i));
                             break;
                     }
-                    builder.Append(mvcLabel.ToString());
+                    builder.Append(mvcTextBox.ToString());
                 }
 
                 if (gridPermissions.Contains(GridEnums.GridPermission.Delete) || 
@@ -135,7 +133,7 @@ namespace System.Web.Mvc.Html
                 }
             }
 
-            return builder.ToString();
+            return WrapInElement("div", builder.ToString());
         }
 
         private static string ConstructScripts(List<GridEnums.GridPermission> gridPermissions)
@@ -154,6 +152,13 @@ namespace System.Web.Mvc.Html
                 builder.Append(GridCustomScript.CHECKBOX_TOGGLE_FUNCTION);
             }
             return builder.ToString();
+        }
+        private static string WrapInElement(string elementType, string innerHtml)
+        {
+            TagBuilder tagBuilder = new TagBuilder(elementType);
+            tagBuilder.InnerHtml = innerHtml;
+
+            return tagBuilder.ToString();
         }
     }
 }
