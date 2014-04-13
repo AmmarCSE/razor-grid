@@ -33,7 +33,7 @@ namespace System.Web.Mvc.Html
             gridSections.Add(htmlHelper.ConstructHeaders(modelProperties, gridPermissions));
             gridSections.Add(htmlHelper.ConstructBody(modelProperties, ((IList<TGridModel>) metadata.Model).Count, gridPermissions));
 
-            gridSections.Add(ConstructScripts(gridPermissions));
+            gridSections.Add(ConstructPager());
 
             StringBuilder builder = new StringBuilder();
             foreach (var section in gridSections)
@@ -136,22 +136,9 @@ namespace System.Web.Mvc.Html
             return WrapInElement("div", builder.ToString());
         }
 
-        private static string ConstructScripts(List<GridEnums.GridPermission> gridPermissions)
+        private static string ConstructPager()
         {
-            StringBuilder builder = new StringBuilder();
-
-            if (gridPermissions.Contains(GridEnums.GridPermission.Add) || 
-                gridPermissions.Contains(GridEnums.GridPermission.Edit))
-            {
-                builder.Append(GridCustomScript.ACTION_REDIRECT_FUNCTION);
-            }
-
-            if (gridPermissions.Contains(GridEnums.GridPermission.Delete) || 
-                gridPermissions.Contains(GridEnums.GridPermission.Update_Activation))
-            {
-                builder.Append(GridCustomScript.CHECKBOX_TOGGLE_FUNCTION);
-            }
-            return builder.ToString();
+            return GridCustomElement.PAGER;
         }
         private static string WrapInElement(string elementType, string innerHtml)
         {

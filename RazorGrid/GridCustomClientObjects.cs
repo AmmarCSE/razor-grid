@@ -21,6 +21,7 @@ namespace System.Web.Mvc.Html
         public static string DELETE_ICON = "<button style=\"background-color: rgb(238, 238, 238);\">D</button>"; 
         public static string ACTIVATE_ICON = "<button style=\"background-color: rgb(238, 238, 238);\">A</button>"; 
         public static string UNACTIVATE_ICON = "<button style=\"background-color: rgb(238, 238, 238);\">U</button>"; 
+        public static string PAGER = "<div><button>L</button><button>P</button><button>N</button><button>L</button></div>"; 
     }
 
     public static class GridCustomScript
