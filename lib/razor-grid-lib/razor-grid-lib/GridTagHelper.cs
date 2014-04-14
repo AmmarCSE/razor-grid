@@ -1,5 +1,4 @@
-﻿using RazorGrid.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -36,7 +35,7 @@ namespace System.Web.Mvc.Html
                 htmlAttributes: null);
         }
 
-        public static string WrapInElement(string elementType, string innerHtml, bool appendBreak, string cssClass, object htmlAttributes)
+        public static string WrapInElement(string elementType, string innerHtml, bool appendBreak, string cssClass, Dictionary<string, object> htmlAttributes)
         {
             return WrapInElementHelper(elementType: elementType, 
                 innerHtml: innerHtml,
@@ -45,7 +44,7 @@ namespace System.Web.Mvc.Html
                 htmlAttributes: htmlAttributes);
         }
 
-        public static string WrapInElementHelper(string elementType, string innerHtml, bool appendBreak, string cssClass, object htmlAttributes)
+        public static string WrapInElementHelper(string elementType, string innerHtml, bool appendBreak, string cssClass, Dictionary<string, object> htmlAttributes)
         {
             TagBuilder tagBuilder = new TagBuilder(elementType);
             tagBuilder.InnerHtml = innerHtml;
@@ -56,7 +55,7 @@ namespace System.Web.Mvc.Html
             }
             if(htmlAttributes != null)
             {
-                tagBuilder.MergeAttributes(HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes));
+                tagBuilder.MergeAttributes(htmlAttributes);
             }
 
             string element = tagBuilder.ToString();

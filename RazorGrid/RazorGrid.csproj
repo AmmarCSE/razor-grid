@@ -180,19 +180,12 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="GridTagHelper.cs" />
-    <Compile Include="GridCustomClientObjects.cs" />
-    <Compile Include="GridEnums.cs" />
-    <Compile Include="GridExpressionHelper.cs" />
-    <Compile Include="GridBuilder.cs" />
-    <Compile Include="GridPropertyHelper.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="GridExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\razor-grid.css" />

@@ -1,5 +1,4 @@
-﻿using RazorGrid.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -18,21 +17,21 @@ namespace System.Web.Mvc.Html
     {
         public static Expression<Func<TModel, TProperty>> GenerateHeaderExpression<TModel, TProperty>(PropertyInfo property)
         {
-            ParameterExpression fieldName = Expression.Parameter(typeof(TModel), "m");
-
-            var dataListExpr = Expression.Property(fieldName, "Data");
-            var itemExpr = Expression.Property(dataListExpr, "Item");
-            var propertyExpr = Expression.Property(itemExpr, property.Name);
-
-            return Expression.Lambda<Func<TModel, TProperty>>(propertyExpr, fieldName);
+            return GenerateExpression<TModel, TProperty>(property, null);
         }
 
         public static Expression<Func<TModel, TProperty>> GenerateBodyExpression<TModel, TProperty>(PropertyInfo property, int rowIndex)
         {
+            return GenerateExpression<TModel, TProperty>(property, rowIndex);
+        }
+
+        public static Expression<Func<TModel, TProperty>> GenerateExpression<TModel, TProperty>(PropertyInfo property, int? rowIndex)
+        {
             ParameterExpression fieldName = Expression.Parameter(typeof(TModel), "m");
 
             var dataListExpr = Expression.Property(fieldName, "Data");
-            var itemExpr = Expression.Property(dataListExpr, "Item", Expression.Constant(rowIndex));
+            var itemExpr = rowIndex.HasValue ? (Expression)Expression.Property(dataListExpr, "Item", Expression.Constant(rowIndex.Value)) : 
+                Expression.Property(dataListExpr, "Item");
             var propertyExpr = Expression.Property(itemExpr, property.Name);
 
             return Expression.Lambda<Func<TModel, TProperty>>(propertyExpr, fieldName);

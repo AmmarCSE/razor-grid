@@ -83,7 +83,7 @@ namespace RazorGrid.Models
         public string Address { get; set; }
 
         [Display(Name = "Age")]
-        public int Age { get; set; }
+        public int? Age { get; set; }
     }
 
     public class GridModelList

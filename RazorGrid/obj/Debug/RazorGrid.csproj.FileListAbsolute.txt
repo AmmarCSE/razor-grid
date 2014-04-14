@@ -247,3 +247,5 @@ C:\Users\AmmarWork\Documents\GitHub\razor-grid\RazorGrid\bin\zh-Hant\System.Spat
 C:\Users\AmmarWork\Documents\GitHub\razor-grid\RazorGrid\obj\Debug\RazorGrid.csprojResolveAssemblyReference.cache
 C:\Users\AmmarWork\Documents\GitHub\razor-grid\RazorGrid\obj\Debug\RazorGrid.dll
 C:\Users\AmmarWork\Documents\GitHub\razor-grid\RazorGrid\obj\Debug\RazorGrid.pdb
+C:\Users\aabuyasein\Documents\GitHub\razor-grid\RazorGrid\bin\razor-grid-lib.dll
+C:\Users\aabuyasein\Documents\GitHub\razor-grid\RazorGrid\bin\razor-grid-lib.pdb
