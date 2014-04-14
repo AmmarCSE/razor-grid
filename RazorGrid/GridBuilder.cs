@@ -31,6 +31,11 @@ namespace System.Web.Mvc.Html
             gridSections.Add(htmlHelper.ConstructHeaders(modelProperties, gridPermissions));
             gridSections.Add(htmlHelper.ConstructBody(modelProperties, ((IList<TGridModel>) metadata.Model).Count, gridPermissions));
 
+<<<<<<< HEAD
+=======
+            gridSections.Add(ConstructPager());
+
+>>>>>>> 150eee121101facc93ef772c5493575f783a0130
             StringBuilder builder = new StringBuilder();
             foreach (var section in gridSections)
             {
@@ -131,12 +136,23 @@ namespace System.Web.Mvc.Html
                 {
                     rowBuilder.Append(GridCustomElement.DELETE_ICON);
                 }
+<<<<<<< HEAD
 
                 string row = GridTagHelper.WrapInElement("div", rowBuilder.ToString(), true, "gridRow");
                 bodyBuilder.Append(row);
             }
 
             return GridTagHelper.WrapInElement("div", bodyBuilder.ToString(), false, "gridBody");
+=======
+            }
+
+            return WrapInElement("div", builder.ToString());
+        }
+
+        private static string ConstructPager()
+        {
+            return GridCustomElement.PAGER;
+>>>>>>> 150eee121101facc93ef772c5493575f783a0130
         }
 
     }
