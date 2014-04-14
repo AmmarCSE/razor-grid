@@ -12,8 +12,6 @@ using System.Web;
 
 namespace System.Web.Mvc.Html
 {
-    // Summary:
-    //     Represents support for the HTML label element in an ASP.NET MVC view.
     public static class GridBuilder
     {
         public static MvcHtmlString BuildGrid<TModel, TGridModel>(
@@ -33,15 +31,14 @@ namespace System.Web.Mvc.Html
             gridSections.Add(htmlHelper.ConstructHeaders(modelProperties, gridPermissions));
             gridSections.Add(htmlHelper.ConstructBody(modelProperties, ((IList<TGridModel>) metadata.Model).Count, gridPermissions));
 
-            gridSections.Add(ConstructScripts(gridPermissions));
-
             StringBuilder builder = new StringBuilder();
             foreach (var section in gridSections)
             {
                 builder.Append(section);
             }
 
-            return MvcHtmlString.Create(builder.ToString());
+            string grid = GridTagHelper.WrapInElement("div", builder.ToString(), false, "grid");
+            return MvcHtmlString.Create(grid);
         }
 
         private static string ConstructActionBar(List<GridEnums.GridPermission> gridPermissions, Dictionary<GridEnums.GridPermission, string> gridActions)
@@ -64,7 +61,7 @@ namespace System.Web.Mvc.Html
                 builder.Append(GridCustomElement.ADD_BUTTON(gridActions[GridEnums.GridPermission.Add]));
             }
 
-            return builder.ToString();
+            return GridTagHelper.WrapInElement("div", builder.ToString(), true);
         }
 
         private static string ConstructHeaders<TModel>(this HtmlHelper<TModel> htmlHelper, IList<PropertyInfo> properties, List<GridEnums.GridPermission> gridPermissions)
@@ -74,7 +71,7 @@ namespace System.Web.Mvc.Html
             if (gridPermissions.Contains(GridEnums.GridPermission.Delete) || 
                 gridPermissions.Contains(GridEnums.GridPermission.Update_Activation))
             {
-                builder.Append(htmlHelper.CheckBox("ToggleAll", new { onchange = GridCustomScript.CHECKBOX_TOGGLE("$(this)")}));
+                builder.Append(GridTagHelper.WrapInElement("div", htmlHelper.CheckBox("ToggleAll").ToString()));
             }
 
             foreach (var property in properties)
@@ -82,30 +79,33 @@ namespace System.Web.Mvc.Html
                 TypeCode typeCode = Type.GetTypeCode(property.PropertyType);
 
                 MvcHtmlString mvcLabel = null;
-                switch (typeCode) { case TypeCode.String:
+                switch (typeCode) { 
+                    case TypeCode.String:
                         mvcLabel = htmlHelper.LabelFor(GridExpressionHelper.GenerateHeaderExpression<TModel, string>(property));
                         break;
                     case TypeCode.Int32:
                         mvcLabel = htmlHelper.LabelFor(GridExpressionHelper.GenerateHeaderExpression<TModel, int>(property));
                         break;
                 }
-                string header = WrapInElement("div", mvcLabel.ToString());
+                string header = GridTagHelper.WrapInElement("div", mvcLabel.ToString());
                 builder.Append(header);
             }
 
-            return WrapInElement("div", builder.ToString());
+            return GridTagHelper.WrapInElement("div", builder.ToString(), true, "gridHeader");
         }
 
         private static string ConstructBody<TModel>(this HtmlHelper<TModel> htmlHelper, IList<PropertyInfo> properties, int numRows, List<GridEnums.GridPermission> gridPermissions)
         {
-            StringBuilder builder = new StringBuilder();
+            StringBuilder bodyBuilder = new StringBuilder();
 
             for (int i = 0; i < numRows; i++)
             {
+                StringBuilder rowBuilder = new StringBuilder();
+
                 if (gridPermissions.Contains(GridEnums.GridPermission.Delete) || 
                     gridPermissions.Contains(GridEnums.GridPermission.Update_Activation))
                 {
-                    builder.Append(htmlHelper.CheckBox("GridRowCheckBox"));
+                    rowBuilder.Append(GridTagHelper.WrapInElement("div", htmlHelper.CheckBox("GridRowCheckBox").ToString()));
                 }
 
                 foreach (var property in properties)
@@ -123,42 +123,21 @@ namespace System.Web.Mvc.Html
                             mvcTextBox = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateBodyExpression<TModel, int>(property, i));
                             break;
                     }
-                    builder.Append(mvcTextBox.ToString());
+                    rowBuilder.Append(mvcTextBox.ToString());
                 }
 
                 if (gridPermissions.Contains(GridEnums.GridPermission.Delete) || 
                     gridPermissions.Contains(GridEnums.GridPermission.Edit))
                 {
-                    builder.Append(GridCustomElement.DELETE_ICON);
+                    rowBuilder.Append(GridCustomElement.DELETE_ICON);
                 }
+
+                string row = GridTagHelper.WrapInElement("div", rowBuilder.ToString(), true, "gridRow");
+                bodyBuilder.Append(row);
             }
 
-            return WrapInElement("div", builder.ToString());
+            return GridTagHelper.WrapInElement("div", bodyBuilder.ToString(), false, "gridBody");
         }
 
-        private static string ConstructScripts(List<GridEnums.GridPermission> gridPermissions)
-        {
-            StringBuilder builder = new StringBuilder();
-
-            if (gridPermissions.Contains(GridEnums.GridPermission.Add) || 
-                gridPermissions.Contains(GridEnums.GridPermission.Edit))
-            {
-                builder.Append(GridCustomScript.ACTION_REDIRECT_FUNCTION);
-            }
-
-            if (gridPermissions.Contains(GridEnums.GridPermission.Delete) || 
-                gridPermissions.Contains(GridEnums.GridPermission.Update_Activation))
-            {
-                builder.Append(GridCustomScript.CHECKBOX_TOGGLE_FUNCTION);
-            }
-            return builder.ToString();
-        }
-        private static string WrapInElement(string elementType, string innerHtml)
-        {
-            TagBuilder tagBuilder = new TagBuilder(elementType);
-            tagBuilder.InnerHtml = innerHtml;
-
-            return tagBuilder.ToString();
-        }
     }
 }

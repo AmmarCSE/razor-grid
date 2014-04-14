@@ -1,0 +1,10 @@
+﻿.gridRow input, .gridRow button, .gridHeader div{
+margin: 0px;
+padding: 0px;
+float: left;
+}
+.gridHeader{
+	width: 100%;
+}
+.gridHeader div{
+}

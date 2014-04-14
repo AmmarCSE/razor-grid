@@ -1,16 +1,4 @@
 <head>
-<style>
-body input, body button, body div{
-margin: 0px;
-padding: 0px;
-float: left;
-}
-.gridHeader{
-	width: 100%;
-}
-.gridHeader div{
-}
-</style>
 </head>
 <body>
 <div class="grid">
@@ -61,4 +49,16 @@ function GridActionRedirect(Url){window.location = Url}
 function ToggleGridCheckBoxes(GridId){$('#' + GridId).find('[name="GridRowCheckBox"]').prop('checked', $('[name="ToggleAll"]').prop('checked'))}
 </script>
 </div>
+<style>
+body input, body button, body div{
+margin: 0px;
+padding: 0px;
+float: left;
+}
+.gridHeader{
+	width: 100%;
+}
+.gridHeader div{
+}
+</style>
 </body>

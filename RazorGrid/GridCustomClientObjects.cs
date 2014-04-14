@@ -25,18 +25,9 @@ namespace System.Web.Mvc.Html
 
     public static class GridCustomScript
     {
-        public static string ACTION_REDIRECT_FUNCTION = "<script>function GridActionRedirect(Url){window.location = Url}</script>";
-
         public static string ACTION_REDIRECT(string Url)
         {
             return string.Format("GridActionRedirect({0})", Url);
-        }
-
-        public static string CHECKBOX_TOGGLE_FUNCTION = "<script>function ToggleGridCheckBoxes(GridId){console.log(GridId);$('body').find('[name=\"GridRowCheckBox\"]').prop('checked', $('[name=\"ToggleAll\"]').prop('checked'))}</script>";
-
-        public static string CHECKBOX_TOGGLE(string Url)
-        {
-            return string.Format("ToggleGridCheckBoxes({0})", Url);
         }
     }
 }
