@@ -16,8 +16,7 @@ namespace System.Web.Mvc.Html
         public static MvcHtmlString BuildGrid<TModel, TGridModel>(
             this HtmlHelper<TModel> htmlHelper, 
             Expression<Func<TModel, List<TGridModel>>> gridExpression, 
-            List<GridEnums.GridPermission> gridPermissions, 
-            Dictionary<GridEnums.GridPermission, string> gridActions)
+            List<GridEnums.GridPermission> gridPermissions)
         {
             ModelMetadata metadata = ModelMetadata.FromLambdaExpression(gridExpression, htmlHelper.ViewData);
             
@@ -25,7 +24,7 @@ namespace System.Web.Mvc.Html
 
             IList<string> gridSections = new List<string>();
 
-            gridSections.Add(ConstructActionBar(gridPermissions, gridActions));
+            gridSections.Add(ConstructActionBar(gridPermissions));
 
             gridSections.Add(htmlHelper.ConstructHeaders(GridPropertyHelper.ExtractNonKeyProperties(modelProperties), gridPermissions));
             gridSections.Add(htmlHelper.ConstructBody(modelProperties, ((IList<TGridModel>) metadata.Model).Count, gridPermissions));
@@ -42,24 +41,24 @@ namespace System.Web.Mvc.Html
             return MvcHtmlString.Create(grid);
         }
 
-        private static string ConstructActionBar(List<GridEnums.GridPermission> gridPermissions, Dictionary<GridEnums.GridPermission, string> gridActions)
+        private static string ConstructActionBar(List<GridEnums.GridPermission> gridPermissions)
         {
             StringBuilder builder = new StringBuilder();
 
             if (gridPermissions.Contains(GridEnums.GridPermission.Delete))
             {
-                builder.Append(GridCustomElement.DELETE_ICON);
+                builder.Append(GridTagHelper.WrapInElement("div", GridCustomElement.DELETE_ICON, false, "btn"));
             }
 
             if (gridPermissions.Contains(GridEnums.GridPermission.Update_Activation))
             {
-                builder.Append(GridCustomElement.ACTIVATE_ICON);
-                builder.Append(GridCustomElement.UNACTIVATE_ICON);
+                builder.Append(GridTagHelper.WrapInElement("div", GridCustomElement.ACTIVATE_ICON, false, "btn"));
+                builder.Append(GridTagHelper.WrapInElement("div", GridCustomElement.UNACTIVATE_ICON, false, "btn"));
             }
 
             if (gridPermissions.Contains(GridEnums.GridPermission.Add))
             {
-                builder.Append(GridCustomElement.ADD_BUTTON(gridActions[GridEnums.GridPermission.Add]));
+                builder.Append(GridTagHelper.WrapInElement("span", GridCustomElement.ADD_BUTTON, false, "gridAdd"));
             }
 
             return GridTagHelper.WrapInElement("div", builder.ToString(), true);
@@ -77,7 +76,7 @@ namespace System.Web.Mvc.Html
 
             foreach (var property in properties)
             {
-                MvcHtmlString mvcLabel = htmlHelper.GenerateElement(property);
+                MvcHtmlString mvcLabel = htmlHelper.LabelElement(property);
 
                 string header = GridTagHelper.WrapInElement("div", mvcLabel.ToString());
                 builder.Append(header);
@@ -97,13 +96,20 @@ namespace System.Web.Mvc.Html
                 if (gridPermissions.Contains(GridEnums.GridPermission.Delete) || 
                     gridPermissions.Contains(GridEnums.GridPermission.Update_Activation))
                 {
-                    rowBuilder.Append(GridTagHelper.WrapInElement("div", htmlHelper.CheckBox("GridRowCheckBox").ToString()));
+                    rowBuilder.Append(GridTagHelper.WrapInElement("div", htmlHelper.CheckBox("CheckBox").ToString(), false, "gridRowCheckBox"));
                 }
 
-                properties = GridPropertyHelper.ExtractNonKeyProperties(properties);
-                foreach (var property in properties)
+                var keys = GridPropertyHelper.ExtractKeyProperties(properties);
+                foreach (var key in keys)
                 {
-                    MvcHtmlString mvcTextBox = htmlHelper.GenerateElement(property, i);
+                    MvcHtmlString mvcTextBox = htmlHelper.KeyElement(key, i);
+                    rowBuilder.Append(mvcTextBox.ToString());
+                }
+
+                var fields = GridPropertyHelper.ExtractNonKeyProperties(properties);
+                foreach (var field in fields)
+                {
+                    MvcHtmlString mvcTextBox = htmlHelper.TextBoxElement(field, i);
                     rowBuilder.Append(mvcTextBox.ToString());
                 }
 
@@ -113,7 +119,7 @@ namespace System.Web.Mvc.Html
                     rowBuilder.Append(GridCustomElement.DELETE_ICON);
                 }
 
-                string row = GridTagHelper.WrapInElement("div", rowBuilder.ToString(), true, "gridRow");
+                string row = GridTagHelper.WrapInElement("div", rowBuilder.ToString(), false, "gridRow");
                 bodyBuilder.Append(row);
             }
 
@@ -123,92 +129,6 @@ namespace System.Web.Mvc.Html
         private static string ConstructPager()
         {
             return GridCustomElement.PAGER;
-        }
-
-        private static MvcHtmlString GenerateElement<TModel>(this HtmlHelper<TModel> htmlHelper, PropertyInfo property)
-        {
-            bool isNullable;
-            TypeCode typeCode = GridPropertyHelper.DetermineTypeCode(property, out isNullable);
-
-            MvcHtmlString mvcElement = null;
-            if (isNullable)
-            {
-                switch (typeCode)
-                {
-                    case TypeCode.Int32:
-                        mvcElement = htmlHelper.LabelFor(GridExpressionHelper.GenerateExpression<TModel, int?>(property, null));
-                        break;
-                    case TypeCode.Int64:
-                        mvcElement = htmlHelper.LabelFor(GridExpressionHelper.GenerateExpression<TModel, long?>(property, null));
-                        break;
-                    case TypeCode.Decimal:
-                        mvcElement = htmlHelper.LabelFor(GridExpressionHelper.GenerateExpression<TModel, decimal?>(property, null));
-                        break;
-                }
-            }
-            else
-            {
-                switch (typeCode)
-                {
-                    case TypeCode.String:
-                        mvcElement = htmlHelper.LabelFor(GridExpressionHelper.GenerateExpression<TModel, string>(property, null));
-                        break;
-                    case TypeCode.Int32:
-                        mvcElement = htmlHelper.LabelFor(GridExpressionHelper.GenerateExpression<TModel, int>(property, null));
-                        break;
-                    case TypeCode.Int64:
-                        mvcElement = htmlHelper.LabelFor(GridExpressionHelper.GenerateExpression<TModel, long>(property, null));
-                        break;
-                    case TypeCode.Decimal:
-                        mvcElement = htmlHelper.LabelFor(GridExpressionHelper.GenerateExpression<TModel, decimal>(property, null));
-                        break;
-                }
-            }
-
-            return mvcElement;
-        }
-
-        private static MvcHtmlString GenerateElement<TModel>(this HtmlHelper<TModel> htmlHelper, PropertyInfo property, int? rowIndex)
-        {
-            bool isNullable;
-            TypeCode typeCode = GridPropertyHelper.DetermineTypeCode(property, out isNullable);
-
-            MvcHtmlString mvcElement = null;
-            if (isNullable)
-            {
-                switch (typeCode)
-                {
-                    case TypeCode.Int32:
-                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, int?>(property, rowIndex), GridPropertyHelper.RetrieveHtmlAttributes(property));
-                        break;
-                    case TypeCode.Int64:
-                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, long?>(property, rowIndex), GridPropertyHelper.RetrieveHtmlAttributes(property));
-                        break;
-                    case TypeCode.Decimal:
-                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, decimal?>(property, rowIndex), GridPropertyHelper.RetrieveHtmlAttributes(property));
-                        break;
-                }
-            }
-            else
-            {
-                switch (typeCode)
-                {
-                    case TypeCode.String:
-                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, string>(property, rowIndex), GridPropertyHelper.RetrieveHtmlAttributes(property));
-                        break;
-                    case TypeCode.Int32:
-                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, int>(property, rowIndex), GridPropertyHelper.RetrieveHtmlAttributes(property));
-                        break;
-                    case TypeCode.Int64:
-                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, long>(property, rowIndex), GridPropertyHelper.RetrieveHtmlAttributes(property));
-                        break;
-                    case TypeCode.Decimal:
-                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, decimal>(property, rowIndex), GridPropertyHelper.RetrieveHtmlAttributes(property));
-                        break;
-                }
-            }
-
-            return mvcElement;
         }
     }
 }

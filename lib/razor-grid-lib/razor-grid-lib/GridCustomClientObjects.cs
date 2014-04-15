@@ -13,21 +13,10 @@ namespace System.Web.Mvc.Html
 {
     public static class GridCustomElement
     {
-        public static string ADD_BUTTON(string action)
-        {
-            return string.Format("<button onclick=\"{0}\">Add new</button>", action);
-        }
-        public static string DELETE_ICON = "<button style=\"background-color: rgb(238, 238, 238);\">D</button>"; 
-        public static string ACTIVATE_ICON = "<button style=\"background-color: rgb(238, 238, 238);\">A</button>"; 
-        public static string UNACTIVATE_ICON = "<button style=\"background-color: rgb(238, 238, 238);\">U</button>"; 
-        public static string PAGER = "<div><button>L</button><button>P</button><button>N</button><button>L</button></div>"; 
-    }
-
-    public static class GridCustomScript
-    {
-        public static string ACTION_REDIRECT(string Url)
-        {
-            return string.Format("GridActionRedirect({0})", Url);
-        }
+        public static string ADD_BUTTON = "<button>Add new</button>";
+        public static string DELETE_ICON = "<span title=\"Delete\" class=\"icon-trash\"></span>"; 
+        public static string ACTIVATE_ICON = "<span title=\"Activate\" class=\"icon-ok-circle\"></span>"; 
+        public static string UNACTIVATE_ICON = "<span title=\"Unactivate\" class=\"icon-ban-circle\"></span>"; 
+        public static string PAGER = "<div><button>F</button><button>P</button><button>N</button><button>L</button></div>"; 
     }
 }

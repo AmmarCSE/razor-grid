@@ -47,14 +47,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="GridElementHelper.cs" />
+    <Compile Include="GridActionAttribute.cs" />
     <Compile Include="GridBuilder.cs" />
     <Compile Include="GridCustomClientObjects.cs" />
     <Compile Include="GridEnums.cs" />
     <Compile Include="GridExpressionHelper.cs" />
     <Compile Include="GridExtensions.cs" />
     <Compile Include="GridPropertyHelper.cs" />
-    <Compile Include="GridStyleAttribute.cs" />
+    <Compile Include="GridHtmlAttribute.cs" />
     <Compile Include="GridTagHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

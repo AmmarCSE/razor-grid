@@ -19,6 +19,11 @@ namespace System.Web.Mvc.Html
             return new List<PropertyInfo>(typeof(TGridModel).GetProperties());
         }
 
+        public static IList<PropertyInfo> ExtractKeyProperties(IList<PropertyInfo> properties)
+        {
+            return properties = properties.Where(p => Attribute.IsDefined(p, typeof(KeyAttribute), false)).ToList();
+        }
+
         public static IList<PropertyInfo> ExtractNonKeyProperties(IList<PropertyInfo> properties)
         {
             return properties = properties.Where(p => !Attribute.IsDefined(p, typeof(KeyAttribute), false)).ToList();

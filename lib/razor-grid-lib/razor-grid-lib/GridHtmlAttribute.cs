@@ -6,7 +6,7 @@ using System.Web;
 
 namespace razor_grid_lib
 {
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method, AllowMultiple=true)]
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple=true)]
     public class GridHtmlAttribute : Attribute
     {
          public string Attr { get; set; }
