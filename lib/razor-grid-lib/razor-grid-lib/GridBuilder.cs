@@ -36,8 +36,8 @@ namespace System.Web.Mvc.Html
             {
                 builder.Append(section);
             }
-
-            string grid = GridTagHelper.WrapInElement("div", builder.ToString(), false, "grid");
+            
+            string grid = GridTagHelper.WrapInElement("div", builder.ToString(), false, "grid", GridPropertyHelper.RetrieveActionAttributes<TGridModel>());
             return MvcHtmlString.Create(grid);
         }
 
@@ -47,13 +47,13 @@ namespace System.Web.Mvc.Html
 
             if (gridPermissions.Contains(GridEnums.GridPermission.Delete))
             {
-                builder.Append(GridTagHelper.WrapInElement("div", GridCustomElement.DELETE_ICON, false, "btn"));
+                builder.Append(GridTagHelper.WrapInElement("div", GridCustomElement.DELETE_ICON, false, "btn gridDelete"));
             }
 
             if (gridPermissions.Contains(GridEnums.GridPermission.Update_Activation))
             {
-                builder.Append(GridTagHelper.WrapInElement("div", GridCustomElement.ACTIVATE_ICON, false, "btn"));
-                builder.Append(GridTagHelper.WrapInElement("div", GridCustomElement.UNACTIVATE_ICON, false, "btn"));
+                builder.Append(GridTagHelper.WrapInElement("div", GridCustomElement.ACTIVATE_ICON, false, "btn gridActivate"));
+                builder.Append(GridTagHelper.WrapInElement("div", GridCustomElement.UNACTIVATE_ICON, false, "btn gridUnactivate"));
             }
 
             if (gridPermissions.Contains(GridEnums.GridPermission.Add))
@@ -71,17 +71,22 @@ namespace System.Web.Mvc.Html
             if (gridPermissions.Contains(GridEnums.GridPermission.Delete) || 
                 gridPermissions.Contains(GridEnums.GridPermission.Update_Activation))
             {
-                builder.Append(GridTagHelper.WrapInElement("div", htmlHelper.CheckBox("ToggleAll").ToString()));
+                builder.Append(GridTagHelper.WrapInElement("div", htmlHelper.CheckBox("triggerToggleAll").ToString(), false, "ToggleAll"));
             }
 
             foreach (var property in properties)
             {
                 MvcHtmlString mvcLabel = htmlHelper.LabelElement(property);
 
-                string header = GridTagHelper.WrapInElement("div", mvcLabel.ToString());
+                string header = GridTagHelper.WrapInElement("div", mvcLabel.ToString(), false, "", GridPropertyHelper.RetrieveHtmlAttributes(property));
                 builder.Append(header);
             }
 
+            if (gridPermissions.Contains(GridEnums.GridPermission.Delete) || 
+                gridPermissions.Contains(GridEnums.GridPermission.Edit))
+            {
+                builder.Append(GridTagHelper.WrapInElement("div", "", false, "actionColumn"));
+            }
             return GridTagHelper.WrapInElement("div", builder.ToString(), true, "gridHeader");
         }
 
@@ -116,7 +121,16 @@ namespace System.Web.Mvc.Html
                 if (gridPermissions.Contains(GridEnums.GridPermission.Delete) || 
                     gridPermissions.Contains(GridEnums.GridPermission.Edit))
                 {
-                    rowBuilder.Append(GridCustomElement.DELETE_ICON);
+                    string actions = "";
+                    if (gridPermissions.Contains(GridEnums.GridPermission.Edit))
+                    {
+                        actions += GridCustomElement.EDIT_ICON;
+                    }
+                    if (gridPermissions.Contains(GridEnums.GridPermission.Delete))
+                    {
+                        actions += GridCustomElement.DELETE_ICON;
+                    }
+                    rowBuilder.Append(GridTagHelper.WrapInElement("div", actions, false, "actionColumn"));
                 }
 
                 string row = GridTagHelper.WrapInElement("div", rowBuilder.ToString(), false, "gridRow");

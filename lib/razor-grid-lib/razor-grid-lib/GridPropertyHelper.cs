@@ -40,6 +40,18 @@ namespace System.Web.Mvc.Html
             }
             return htmlAttributes;
         }
+
+        public static Dictionary<string, object> RetrieveActionAttributes<TGridModel>()
+        {
+            Dictionary<string, object> htmlAttributes = new Dictionary<string, object>();
+            GridActionAttribute[] attributes = (GridActionAttribute[])typeof(TGridModel).GetCustomAttributes(typeof(GridActionAttribute), false);
+
+            foreach (var attribute in attributes)
+            {
+                htmlAttributes.Add(attribute.Action, attribute.ActionVal);
+            }
+            return htmlAttributes;
+        }
         
         public static TypeCode DetermineTypeCode(PropertyInfo property, out bool isNullable)
         {
