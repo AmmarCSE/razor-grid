@@ -87,7 +87,7 @@ namespace System.Web.Mvc.Html
             {
                 builder.Append(GridTagHelper.WrapInElement("div", "", false, "actionColumn"));
             }
-            return GridTagHelper.WrapInElement("div", builder.ToString(), true, "gridHeader");
+            return GridTagHelper.WrapInElement("div", builder.ToString(), false, "gridHeader");
         }
 
         private static string ConstructBody<TModel>(this HtmlHelper<TModel> htmlHelper, IList<PropertyInfo> properties, int numRows, List<GridEnums.GridPermission> gridPermissions)

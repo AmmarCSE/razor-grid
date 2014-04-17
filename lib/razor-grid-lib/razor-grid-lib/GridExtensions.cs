@@ -11,8 +11,6 @@ using System.Web;
 
 namespace System.Web.Mvc.Html
 {
-    // Summary:
-    //     Represents support for the HTML label element in an ASP.NET MVC view.
     public static class GridExtensions
     {
         public static MvcHtmlString GridFor<TModel, TGridModel>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, List<TGridModel>>> expression)
