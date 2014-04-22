@@ -4,7 +4,7 @@ using System.Linq;
 using System.Security.Principal;
 using System.Web;
 
-namespace razor_grid_lib
+namespace Travel.Agency.RazorGrid.GridAttributes
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple=true)]
     public class GridActionAttribute : Attribute

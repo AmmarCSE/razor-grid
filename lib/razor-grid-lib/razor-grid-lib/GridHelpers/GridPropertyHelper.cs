@@ -1,5 +1,4 @@
-﻿using razor_grid_lib;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
@@ -9,8 +8,9 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Web;
+using Travel.Agency.RazorGrid.GridAttributes;
 
-namespace System.Web.Mvc.Html
+namespace Travel.Agency.RazorGrid.Helpers
 {
     public static class GridPropertyHelper
     {
@@ -31,13 +31,27 @@ namespace System.Web.Mvc.Html
 
         public static Dictionary<string, object> RetrieveHtmlAttributes(PropertyInfo property)
         {
-            Dictionary<string, object> htmlAttributes = new Dictionary<string, object>();
+            Dictionary<string, object> htmlAttributes = RetrieveParentHtmlAttributes(property);
             GridHtmlAttribute[] attributes = (GridHtmlAttribute[])property.GetCustomAttributes(typeof(GridHtmlAttribute), false);
 
             foreach (var attribute in attributes)
             {
                 htmlAttributes.Add(attribute.Attr, attribute.AttrVal);
             }
+            return htmlAttributes;
+        }
+
+        public static Dictionary<string, object> RetrieveParentHtmlAttributes(PropertyInfo property)
+        {
+            Type t = property.ReflectedType;
+            Dictionary<string, object> htmlAttributes = new Dictionary<string, object>();
+            GridReadonlyAttribute[] attributes = (GridReadonlyAttribute[])t.GetCustomAttributes(typeof(GridReadonlyAttribute), false);
+
+            if (attributes.Length > 0)
+            {
+                htmlAttributes.Add("readonly", "readonly");
+            }
+
             return htmlAttributes;
         }
 

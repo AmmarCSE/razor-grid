@@ -47,16 +47,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GridElementHelper.cs" />
-    <Compile Include="GridActionAttribute.cs" />
-    <Compile Include="GridBuilder.cs" />
-    <Compile Include="GridCustomClientObjects.cs" />
-    <Compile Include="GridEnums.cs" />
-    <Compile Include="GridExpressionHelper.cs" />
-    <Compile Include="GridExtensions.cs" />
-    <Compile Include="GridPropertyHelper.cs" />
-    <Compile Include="GridHtmlAttribute.cs" />
-    <Compile Include="GridTagHelper.cs" />
+    <Compile Include="GridAttributes\GridReadonlyAttribute.cs" />
+    <Compile Include="GridHelpers\GridElementHelper.cs" />
+    <Compile Include="GridAttributes\GridActionAttribute.cs" />
+    <Compile Include="Core\GridBuilder.cs" />
+    <Compile Include="GridResources\GridCustomClientObjects.cs" />
+    <Compile Include="GridResources\GridEnums.cs" />
+    <Compile Include="GridHelpers\GridExpressionHelper.cs" />
+    <Compile Include="Core\GridExtensions.cs" />
+    <Compile Include="GridHelpers\GridPropertyHelper.cs" />
+    <Compile Include="GridAttributes\GridHtmlAttribute.cs" />
+    <Compile Include="GridHelpers\GridTagHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
