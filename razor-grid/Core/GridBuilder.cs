@@ -10,10 +10,10 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using System.ComponentModel.DataAnnotations;
-using Travel.Agency.RazorGrid.GridResources;
-using Travel.Agency.RazorGrid.Helpers;
+using AmmarCSE.RazorGrid.Resources;
+using AmmarCSE.RazorGrid.Helpers;
 
-namespace Travel.Agency.RazorGrid.Core
+namespace AmmarCSE.RazorGrid.Core
 {
     public static class GridBuilder
     {

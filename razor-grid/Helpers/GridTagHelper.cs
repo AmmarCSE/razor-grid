@@ -10,7 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 
 
-namespace Travel.Agency.RazorGrid.Helpers
+namespace AmmarCSE.RazorGrid.Helpers
 {
     public static class GridTagHelper
     {

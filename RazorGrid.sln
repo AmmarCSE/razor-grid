@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazorGrid", "RazorGrid\RazorGrid.csproj", "{56EB9331-6E04-47DE-B4E9-50D9133627DB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "razor-grid", "razor-grid\razor-grid.csproj", "{0BAEEBAD-A8D2-408E-B503-5294E2CB9873}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{56EB9331-6E04-47DE-B4E9-50D9133627DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56EB9331-6E04-47DE-B4E9-50D9133627DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56EB9331-6E04-47DE-B4E9-50D9133627DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BAEEBAD-A8D2-408E-B503-5294E2CB9873}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BAEEBAD-A8D2-408E-B503-5294E2CB9873}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BAEEBAD-A8D2-408E-B503-5294E2CB9873}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BAEEBAD-A8D2-408E-B503-5294E2CB9873}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

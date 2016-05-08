@@ -11,7 +11,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 
-namespace Travel.Agency.RazorGrid.Helpers
+namespace AmmarCSE.RazorGrid.Helpers
 {
     public static class GridElementHelper
     {

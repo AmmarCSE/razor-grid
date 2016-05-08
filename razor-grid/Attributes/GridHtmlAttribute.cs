@@ -4,7 +4,7 @@ using System.Linq;
 using System.Security.Principal;
 using System.Web;
 
-namespace Travel.Agency.RazorGrid.GridAttributes
+namespace AmmarCSE.RazorGrid.Attributes
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple=true)]
     public class GridHtmlAttribute : Attribute

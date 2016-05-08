@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AmmarCSE.RazorGrid.Resources;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -104,7 +105,7 @@ namespace RazorGrid.Models
             gridPermissions.Add(GridEnums.GridPermission.Update_Activation);
 
             gridActions = new Dictionary<GridEnums.GridPermission, string>();
-            gridActions.Add(GridEnums.GridPermission.Add, GridCustomScript.ACTION_REDIRECT("'google.com'"));
+            //gridActions.Add(GridEnums.GridPermission.Add, GridCustomScript.ACTION_REDIRECT("'google.com'"));
         }
     }
 

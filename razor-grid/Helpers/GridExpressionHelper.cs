@@ -9,7 +9,7 @@ using System.Text;
 using System.Web;
 
 
-namespace Travel.Agency.RazorGrid.Helpers
+namespace AmmarCSE.RazorGrid.Helpers
 {
     // Summary:
     //     Represents support for the HTML label element in an ASP.NET MVC view.

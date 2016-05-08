@@ -8,9 +8,9 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Web;
-using Travel.Agency.RazorGrid.GridAttributes;
+using AmmarCSE.RazorGrid.Attributes;
 
-namespace Travel.Agency.RazorGrid.Helpers
+namespace AmmarCSE.RazorGrid.Helpers
 {
     public static class GridPropertyHelper
     {

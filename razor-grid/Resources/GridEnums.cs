@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Web;
 
-namespace Travel.Agency.RazorGrid.GridResources
+namespace AmmarCSE.RazorGrid.Resources
 {
     // Summary:
     //     Represents support for the HTML label element in an ASP.NET MVC view.
