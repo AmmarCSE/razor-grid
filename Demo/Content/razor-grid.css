@@ -1,0 +1,217 @@
+﻿.grid {
+    display: inline-block;
+    width: 80%;
+}
+
+    .grid input {
+        cursor: default;
+        color: #3E495B;
+    }
+
+.gridRow {
+    clear: both;
+}
+
+    .gridRow button, .gridRow input, .gridRow input, .gridHeader div {
+        margin: 0px;
+        padding: 0px;
+        float: left;
+        border-radius: 0px;
+        border: none;
+    }
+
+.grid input {
+    resize: none;
+    border-radius: 0px;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    padding-left: 7px;
+    margin-right: -7px;
+}
+
+.gridAdd {
+    /*float: right;*/
+    padding-right: 10px;
+}
+
+.gridHeader {
+    height: 40px;
+}
+
+    .gridHeader div:not(.divBottomBorder), .gridPager {
+        text-align: center;
+        background-color: #F1F1F1;
+        height: 100%;
+        border-top: 1px solid #DBDBDB;
+        border-left: 1px solid #DBDBDB;
+        color: #3E495B;
+        position: relative;
+    }
+
+.divBottomBorder {
+    width: 100%;
+    background: #DBDBDB !important;
+    height: 2px !important;
+    position: absolute !important;
+    bottom: 0px;
+    border-bottom: 1px solid #DBDBDB;
+    border-left: 1px solid #DBDBDB;
+}
+
+.gridPager {
+    border-bottom: none;
+}
+
+.gridHeader div:not(.ToggleAll):not(.actionColumn) {
+    background-image: url(../images/sort_both.png);
+    background-repeat: no-repeat;
+    background-position: right 5px;
+}
+
+.gridHeader div label, .actionColumn label {
+    position: relative;
+    top: 7px;
+    line-height: 15px;
+}
+
+.gridHeader div label, .actionColumn {
+    font-weight: bold;
+}
+
+.gridRow:nth-child(even) input, .gridRow:nth-child(even) .gridRowCheckBox, .gridRow:nth-child(even) .actionColumn {
+    border-left: 1px solid #DBDBDB;
+    background: #FFF;
+}
+
+.gridRow:nth-child(odd) input, .gridRow:nth-child(odd) .gridRowCheckBox, .gridRow:nth-child(odd) .actionColumn {
+    border-left: 1px solid #DBDBDB;
+    background: #F1F1F1;
+}
+
+.gridRowCheckBox, .ToggleAll, .actionColumn {
+    width: 4%;
+    height: 40px;
+    float: left;
+    text-align: center;
+}
+
+.actionColumn {
+    width: 5%;
+}
+
+.gridRowCheckBox, .ToggleAll {
+    text-align: center;
+}
+
+.gridPager {
+    height: 30px;
+    background-color: #eee;
+    margin-top: 40px;
+    padding: 0px;
+    text-align: right;
+}
+
+.icon-edit, .icon-trash, .icon-ok, .icon-remove {
+    cursor: pointer;
+    width: 17px;
+}
+
+input[name="CheckBox"], input[name="triggerToggleAll"] {
+    margin: 15px;
+}
+
+.grid .gridRow:first-child {
+    display: none;
+}
+
+.emptyDiv {
+    width: 100%;
+    height: 25px;
+}
+
+.actionColumnContainer {
+    margin-top: 10px;
+    color: #428FD3;
+    cursor: pointer;
+}
+
+.gridDelete {
+    color: #FF6669;
+}
+
+.gridActivate, .gridUnactivate {
+    color: #428FD3;
+}
+
+.actionButton {
+    margin-right: 15px;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 5px;
+}
+
+.gridRowTemplate input {
+    /*height: 0px;*/
+}
+
+.gridBody {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #DBDBDB;
+}
+
+.grid .pager {
+    display: inline-block;
+    margin: 0px 10px 0px 0px;
+    float: right;
+}
+
+    .grid .pager button {
+        color: #FFF !important;
+        display: inline-block !important;
+        font-family: Calibri !important;
+        font-size: 14px !important;
+        padding: 0px 7px 0px 7px !important;
+        border: 1px solid;
+        height: 30px !important;
+        cursor: pointer !important;
+        text-align: center !important;
+        font-weight: bold !important;
+        text-transform: none !important;
+        letter-spacing: 1px !important;
+        text-shadow: #4a4f50 0 1px 0;
+        text-shadow: 0px 0px 0px #0a67a3 !important;
+        vertical-align: top !important;
+        background-color: #4091D2;
+        -webkit-border-radius: 7px;
+    }
+
+.gridHeader > div:last-child, .gridRow > div:last-child {
+    border-right: 1px solid #DBDBDB;
+}
+
+.no-results {
+    color: red;
+    text-align: center;
+    font-size: large;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    /*display: none;*/
+}
+
+.ReservationConfirmed, .ReservationConfirmed input {
+    color: green !important;
+}
+
+.ReservationTentative, .ReservationTentative input {
+    color: #ff6669 !important;
+}
+
+.YesClass, .YesClass input {
+    color: green !important;
+}
+
+.NoClass, .NoClass input {
+    color: #ff6669 !important;
+}

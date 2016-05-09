@@ -1,4 +1,4 @@
-﻿@model RazorGrid.Models.GridModelList
+﻿@model Demo.Models.GridModelList
 
 @{
     ViewBag.Title = "Log in";
@@ -9,4 +9,4 @@
 <script src="~/Scripts/jquery-1.8.2.min.js"></script>
 <script src="~/Scripts/razor-grid.js"></script>
 
-@Html.GridFor(m => m.Data, Model.gridPermissions, Model.gridActions)
+@Html.GridFor(m => m.Data, Model.gridPermissions)
