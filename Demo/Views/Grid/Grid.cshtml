@@ -6,7 +6,479 @@
 }
 
 <link href="~/Content/razor-grid.css" rel="stylesheet" type="text/css" />
-<script src="~/Scripts/jquery-1.8.2.min.js"></script>
-<script src="~/Scripts/razor-grid.js"></script>
 
 @Html.GridFor(m => m.Data, Model.gridPermissions)
+
+<script src="~/Scripts/jquery-1.8.2.min.js"></script>
+<script>
+
+$(function () {
+    var index = 1;
+   
+    $('.gridRow:first').addClass('gridRowTemplate');
+    $('.field-validation-valid').each(function () {
+        $(this).attr('data-default-name', $(this).attr('data-valmsg-for'));
+    });
+
+
+    $('.gridRow').attr('data-grid-mode', 'readonly');
+    //$('input[data-hijri-datepicker]')
+    //    .each(function(){
+    //        hijriCalendar($(this));
+    //    });
+    $('.grid .calendars-trigger').hide();
+    $('.grid').find('[name="btnAutoComplete"]')
+        .css('height', '42px')
+        .hide();
+    $('[name="triggerToggleAll"]').change(function () {
+        $(this).closest('.grid').find('[name="CheckBox"]').prop('checked', $(this).prop('checked'));
+    });
+    $('body').on('click', '.gridAdd', function () {
+        if ($('.no-results')) {
+            $('.no-results').hide();
+        }
+
+        if ($('[data-add-inline]').length && CheckRowOpen()) {
+            var urlParams = $(this).closest('[data-add-inline]').attr('data-add-inline').split(',');
+            var rowTemplate = $('.gridRowTemplate').first().clone();
+
+            $('.gridBody').append(rowTemplate);
+
+            rowTemplate
+                    .show()
+                    .find('input')
+                    .val('')
+                    .filter(function () {
+                        return $(this).attr('data-grid-key');
+                    })
+                    .each(function () {
+                        $(this).val($('#' + $(this).attr('data-grid-key')).val());
+                    })
+                    .end().end()
+                    .find('[data-tas-control="autocomplete"]')
+                    .each(function () {
+                        JsHandyHelper.autocompleteTransform($(this));
+                    })
+                    .end()
+                    .find('input[data-hijri-datepicker]')
+                    .removeClass('hasCalendarsPicker is-dateEntry')
+                    .each(function () {
+                        $(this).next('.calendars-trigger').remove();
+                        hijiriCalendar($('.gridRow:eq(' + ($('.gridRow').length - 1) + ') [name="' + $(this).attr('name') + '"]'));
+                    });
+
+            OpenEditRow(rowTemplate.find('.icon-edit'), JsHandyHelper.resolveURL.apply(null, urlParams), $('.gridRow').length - 1);
+
+            //override cancel click and attach click for popup
+            rowTemplate
+                .find('.icon-remove')
+                .unbind('click')
+                .click(function () {
+                    rowTemplate.remove();
+                    RemoveValidationMessages();
+                });
+        }
+        else {
+            window.location =
+                JsHandyHelper.resolveURL.apply(null, $(this).closest('[data-add-link]').attr('data-add-link').split(','));
+        }
+    });
+    $('body').on('click', '.actionColumnContainer:has(.editRow:not(.icon-ok))', function (event) {
+        if ($('[data-edit-inline]').length && CheckRowOpen()) {
+            var urlParams = $(this).closest('[data-edit-inline]').attr('data-edit-inline').split(',');
+            OpenEditRow($(this).find('.editRow'), JsHandyHelper.resolveURL.apply(null, urlParams), $('.editRow').index($(this).find('.editRow')));
+        }
+        else if ($('[data-edit-link]')) {
+            var link = $(this).closest('.grid').attr('data-edit-link');
+            window.location = JsHandyHelper.resolveURL.apply(null, link.split(',')) + $(this).closest('.gridRow').find('[data-row-key="primary"]').val();
+        }
+    });
+    $('[data-popup-contenturl]').each(function () {
+        var that = $(this);
+        $(document.body).on('click', '.rowDetails', function () {
+            if ($(this).closest('.gridRow').attr('data-grid-mode') == 'readonly') {
+                var popupParams = {};
+                $(this).closest('.gridRow').find('[data-popup-parameter]').each(function () {
+                    popupParams[$(this).attr('name')] = $(this).val();
+                });
+                that.attr('data-popup-param', JSON.stringify(popupParams));
+                JsHandyHelper.showFancyDialogPopup($('[data-popup-contenturl]'));
+            }
+        });
+    });
+    $('[data-add-link]').each(function () {
+        var that = $(this).attr('data-add-link');
+        $(this).find('.gridAdd').click(function () {
+            window.location = JsHandyHelper.resolveURL.apply(null, that.split(','));
+        });
+    });
+    $('.deleteRow').click(function () {
+        var that = $(this);
+        if (Comfirms()) {
+            GridAjaxPost(
+                JsHandyHelper.resolveURL.apply(null, $(this).closest('.grid').attr('data-delete-link').split(',')),
+                { ids: $(this).closest('.gridRow').find('[data-row-key="primary"]').val() },
+                function (data) {
+                    if (data == 0) {
+                     alert("can't be deleted, it linked with a transaction");
+                 }
+                 else {
+                          that.closest('.gridRow').remove();
+                  }
+                }
+                );
+        }
+    });
+    $('body').on('click', '.gridDelete', function () {
+        var that = $(this);
+        var itemSelected = GenerateCheckedKeyString($(this));
+        if (itemSelected.length == 0) {
+            NoItem();
+        }
+        else if (Comfirms()) {
+
+            var successHandler;
+            if (typeof additionalDeleteHandler !== 'undefined') {
+                
+                successHandler = additionalDeleteHandler;
+            }
+            else {
+                successHandler = DeleteCallSuccess;
+            }
+
+            GridAjaxPost(
+              JsHandyHelper.resolveURL.apply(null, $(this).closest('.grid').attr('data-delete-link').split(',')),
+               { ids: GenerateCheckedKeyString($(this)) },
+                function (data) {
+                    successHandler(that, data);
+                });
+        }
+    });
+    $('body').on('click', '.gridUnactivate', function () {
+        var that = $(this);
+        var itemSelected = GenerateCheckedKeyString($(this));
+        if (itemSelected.length == 0) {
+            NoItem();
+        }
+        else if (DeActiveComfirms()) {
+            GridAjaxPost(
+                JsHandyHelper.resolveURL.apply(null, $(this).closest('.grid').attr('data-unactivate-link').split(',')),
+                { ids: GenerateCheckedKeyString($(this)) },
+                function () {
+                        that.closest('.grid')
+                            .find('[name="CheckBox"]:checked')
+                            .closest('.gridRow')
+                           .remove();
+                }
+                );
+        }
+    });
+    $('body').on('click', '.gridActivate', function () {
+        
+        var that = $(this);
+        var itemSelected = GenerateCheckedKeyString($(this));
+        if (itemSelected.length == 0) {
+            NoItem();
+        }
+        else if (ActiveComfirms()) {
+            GridAjaxPost(
+                JsHandyHelper.resolveURL.apply(null, $(this).closest('.grid').attr('data-activate-link').split(',')),
+                { ids: GenerateCheckedKeyString($(this)) },
+                function () {
+                    that.closest('.grid')
+                        .find('[name="CheckBox"]:checked')
+                       .prop("checked", false);
+                }
+                );
+        }
+    });
+    $('body').on('click', '.gridResetPassword', function () {
+        var link = $(this).closest('.grid').attr('data-resetpassword-link');
+
+        var idsArray = GenerateCheckedKeyString($(this));
+        if (idsArray == '') {
+            alert('Please select user');
+        } else {
+            JsHandyHelper.showFancyDialogPopup($(".gridResetPassword").attr('data-parHold-value', idsArray).attr('data-popup-contenturl', link));
+        }
+    });
+    $('[data-lock-link]').each(function () {
+        var that = $(this).attr('data-lock-link');
+        $('.gridLock').click(function () {k
+            GridAjaxPost(
+                JsHandyHelper.resolveURL.apply(null, that.split(',')),
+                { ids: GenerateCheckedKeyString($(this)) },
+                function () {
+                    GetSearchData();
+                }
+                );
+        });
+    });
+    $('[data-unlock-link]').each(function () {
+        var that = $(this).attr('data-unlock-link');
+        $('.gridUnlock').click(function () {
+            GridAjaxPost(
+                JsHandyHelper.resolveURL.apply(null, that.split(',')),
+                { ids: GenerateCheckedKeyString($(this)) },
+                function () {
+                    GetSearchData();
+                }
+                );
+        });
+    });
+
+    function GenerateCheckedKeyString(caller) {
+        return $.makeArray(
+            caller.closest('.grid')
+            .find('[name="CheckBox"]:checked').closest('.gridRow')
+            .find('[data-row-key="primary"]')
+            .map(function () {
+                return $(this).val();
+            })).join(',');
+    }
+
+    function GridAjaxGet(actionUrl, params, successcallback) {
+        JsHandyHelper.getJSON(
+            actionUrl,
+            params,
+           successcallback,
+            function (ex) {
+            },
+            "");
+    }
+
+    function GridAjaxPost(actionUrl, params, successcallback) {
+        JsHandyHelper.postJSON(
+            actionUrl,
+            params,
+            successcallback,
+            function (ex) {
+            },
+            ""
+            );
+    }
+    function OpenEditRow(icon, postUrl, index) {
+        UpdateUnobtrusiveValidator(index);
+        console.log(icon);
+        icon
+        .unbind('click')
+        .removeClass('icon-edit')
+        .addClass('icon-ok')
+        .click(function () {
+            if ($('.grid').valid() && !$(this).hasClass("disable-edit")) {
+                $(this).addClass('disable-edit');
+                GridAjaxPost(postUrl
+                    , { entity: RetrieveEditRowEntity(icon.closest('.gridRow')) }
+                    , function (data) {
+                        icon.removeClass('disable-edit');
+                        UpdateEntityRow(icon.closest('.gridRow'), data);
+                        CloseEditRow(icon, postUrl);
+                     //   location.reload();
+                    });
+            }
+        })
+        .next('.icon-text')
+        .text('')
+        .next('.deleteRow:has(.icon-trash)')
+        .unbind('click');
+
+        icon
+            .closest('.gridRow')
+            .attr('data-grid-mode', 'edit')
+                .find('.icon-trash')
+                    .removeClass('icon-trash')
+                    .addClass('icon-remove')
+                    .unbind('click')
+                    .click(function () {
+                        icon
+                            .closest('.gridRow')
+                            .find('input, textarea')
+                            .each(function () {
+                                $(this).val($(this).attr('data-pre-edit-val'));
+                            });
+
+                        RemoveValidationMessages();
+
+                        CloseEditRow(icon, postUrl);
+                    })
+                    .end()
+                .find('[readonly]')
+                .css('background', 'rgb(255, 237, 142)')
+                .filter(function () {
+                    return typeof $(this).attr('data-grid-readonly') == 'undefined';
+                })
+                .attr('readonly', false)
+                .end().end()
+                .find('input, textarea')
+                .each(function () {
+                    $(this).attr('data-pre-edit-val', $(this).val());
+                })
+                .end()
+            .find('.calendars-trigger')
+            .show()
+            .css('float', 'left')
+            .prev('input[data-hijri-datepicker]')
+            .css('width', (icon
+                            .closest('.gridRow')
+                            .find('input[data-hijri-datepicker]')
+                            .width()
+                            -
+                            20) + 'px'
+            )
+            .end().end()
+            .find('[name="btnAutoComplete"]')
+            .show()
+            .prev('[data-tas-control="autocomplete"]')
+            .css('width', (icon
+                            .closest('.gridRow')
+                            .find('[name="btnAutoComplete"]')
+                            .prev('[data-tas-control="autocomplete"]')
+                            .width()
+                            -
+                            30) + 'px'
+            );
+    }
+
+    function CloseEditRow(icon, postUrl) {
+        icon
+            .unbind('click')
+            .removeClass('icon-ok')
+            .addClass('icon-edit')
+            .next('.icon-text')
+            .text('Edit')
+            .closest('.gridRow')
+            .attr('data-grid-mode', 'readonly')
+                .find('.icon-remove')
+                    .unbind('click')
+                    .click(function () {
+                        var that = icon.next('.deleteRow:has(.icon-trash)');
+                        GridAjaxPost(
+                            JsHandyHelper.resolveURL.apply(null, $(this).closest('.grid').attr('data-delete-link').split(',')),
+                            { ids: $(this).closest('.gridRow').closest('.gridRow').find('[data-row-key="primary"]').val() },
+                            function () {
+                                that.closest('.gridRow').remove();
+                            }
+                        );
+                    })
+                    .removeClass('icon-remove')
+                    .addClass('icon-trash')
+                    .end()
+                .find('.gridRowVisibleCell input:not([name="btnAutoComplete"])')
+                .attr('readonly', true)
+                .css('background', '')
+                .end()
+            .find('.calendars-trigger')
+            .hide()
+            .prev('input[data-hijri-datepicker]')
+            .css('width', (icon
+                            .closest('.gridRow')
+                            .find('input[data-hijri-datepicker]')
+                            .width()
+                            +
+                            20) + 'px'
+            )
+            .end()
+            .end()
+            .find('[name="btnAutoComplete"]')
+            .hide()
+            .prev('[data-tas-control="autocomplete"]')
+            .css('width', (icon
+                            .closest('.gridRow')
+                            .find('[name="btnAutoComplete"]')
+                            .prev('[data-tas-control="autocomplete"]')
+                            .width()
+                            +
+                            30) + 'px'
+                    );
+    }
+
+    function CheckRowOpen() {
+        if ($('.icon-ok').length == 0) {
+            return true;
+        }
+        else {
+            alert('Please close currently opened row');
+            return false;
+        }
+    }
+    function RetrieveEditRowEntity(row) {
+        var entity = {};
+        row.find('.gridRowVisibleCell input, [type="hidden"]:not(.gridRowCheckBox [type="hidden"])').each(function () {
+            entity[$(this).attr('id')] = $(this).val();
+        });
+        return entity;
+    }
+    function UpdateEntityRow(row, data) {
+        for (var property in data) {
+            if (data.hasOwnProperty(property)) {
+                var currentCell = row.find('[name="' + property + '"]');
+                if (currentCell.is('input')) {
+                    currentCell.val(data[property]);
+                }
+                else {
+                    currentCell.text(data[property]);
+                }
+            }
+        }
+    }
+    function RemoveValidationMessages() {
+        $('.field-validation-error').addClass('field-validation-valid');
+        $('.field-validation-error').removeClass('field-validation-error');
+
+        $('.field-validation-valid span').hide();
+    }
+    //workaround for inability of validation messages and custom attributes at the same time
+    function UpdateUnobtrusiveValidator(index) {
+        if ($('.gridRow:eq(' + index + '):not([data-grid-validation-updated])').length > 0) {
+            $('.gridRowTemplate').find('input').each(function () {
+                var that = $(this);
+                $(this.attributes).each(function () {
+                    $(this).filter(function (attr, val) {
+                        return val.name.indexOf('data-val') > -1;
+                    }).each(function (attr, val) {
+                        $('.gridRow:eq(' + index + '):not([data-grid-validation-updated])')
+                            .find('[name="' + that.attr('name') + '"]:visible')
+                            .each(function () {
+                                $(this).attr(val.name, val.value);
+                                $(this).attr('data-indexify', '');
+                            });
+                    });
+                });
+            });
+
+            $('.gridRow:eq(' + index + '):not([data-grid-validation-updated])')
+                .attr('data-grid-validation-updated', '')
+                .find('[data-indexify]')
+                .each(function () {
+                    $(this).attr('name', 'Data[' + index + '].' + $(this).attr('name'));
+                });
+
+            $('.field-validation-valid').each(function () {
+                $(this).attr('data-valmsg-for', 'Data[' + index + '].' + $(this).attr('data-default-name'));
+            });
+
+            var form = $('.grid')
+                .removeData("validator")
+                .removeData("unobtrusiveValidation");
+
+            $.validator.unobtrusive.parse(form);
+        }
+    }
+
+    function Comfirms() {
+        return confirm("Do you want to delete this item(s)");
+    }
+    function ActiveComfirms() {
+        return confirm("Are you sure you want to activate these item(s)");
+    }
+    function DeActiveComfirms() {
+        return confirm("Are you sure you want to deactivate these item(s)");
+    }
+    function NoItem() {
+        return alert("There is no item selected");
+    }
+    function CanNotBeDeletedMessage() {
+        return   alert("can't be deleted, it linked with a transaction");
+    }
+});
+</script>

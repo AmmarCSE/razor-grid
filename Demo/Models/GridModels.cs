@@ -8,6 +8,7 @@ using System.Web.Mvc.Html;
 using System.Web.Security;
 
 using AmmarCSE.RazorGrid.Resources;
+using AmmarCSE.RazorGrid.Attributes;
 
 namespace Demo.Models
 {
@@ -15,13 +16,16 @@ namespace Demo.Models
     {
         [Required]
         [Display(Name = "Name")]
+        [GridHtml(Attr = "style", AttrVal = "width:19%")]
         public string Name { get; set; }
 
         [Required]
         [Display(Name = "Address")]
+        [GridHtml(Attr = "style", AttrVal = "width:19%")]
         public string Address { get; set; }
 
         [Display(Name = "Age")]
+        [GridHtml(Attr = "style", AttrVal = "width:19%")]
         public int? Age { get; set; }
     }
 
