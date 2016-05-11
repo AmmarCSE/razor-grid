@@ -16,16 +16,16 @@ namespace Demo.Models
     {
         [Required]
         [Display(Name = "Name")]
-        [GridHtml(Attr = "style", AttrVal = "width:19%")]
+        [GridHtml(Attr = "style", AttrVal = "width:33%")]
         public string Name { get; set; }
 
         [Required]
         [Display(Name = "Address")]
-        [GridHtml(Attr = "style", AttrVal = "width:19%")]
+        [GridHtml(Attr = "style", AttrVal = "width:33%")]
         public string Address { get; set; }
 
         [Display(Name = "Age")]
-        [GridHtml(Attr = "style", AttrVal = "width:19%")]
+        [GridHtml(Attr = "style", AttrVal = "width:33%")]
         public int? Age { get; set; }
     }
 
@@ -45,6 +45,7 @@ namespace Demo.Models
             gridPermissions.Add(GridEnums.GridPermission.Add);
             gridPermissions.Add(GridEnums.GridPermission.Delete);
             gridPermissions.Add(GridEnums.GridPermission.Update_Activation);
+            gridPermissions = new List<GridEnums.GridPermission>();
 
             gridActions = new Dictionary<GridEnums.GridPermission, string>();
             //gridActions.Add(GridEnums.GridPermission.Add, GridCustomScript.ACTION_REDIRECT("'google.com'"));

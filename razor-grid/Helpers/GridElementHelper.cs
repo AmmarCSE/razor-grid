@@ -199,19 +199,19 @@ namespace AmmarCSE.RazorGrid.Helpers
                 switch (typeCode)
                 {
                     case (int)TypeCode.Int32:
-                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, int?>(property, rowIndex), strColumnCustomFormat, GridPropertyHelper.RetrieveHtmlAttributes(property));
+                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, int?>(property, rowIndex), strColumnCustomFormat);
                         break;
                     case (int)TypeCode.Int64:
-                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, long?>(property, rowIndex), strColumnCustomFormat, GridPropertyHelper.RetrieveHtmlAttributes(property));
+                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, long?>(property, rowIndex), strColumnCustomFormat);
                         break;
                     case (int)TypeCode.Decimal:
-                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, decimal?>(property, rowIndex), strColumnCustomFormat, GridPropertyHelper.RetrieveHtmlAttributes(property));
+                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, decimal?>(property, rowIndex), strColumnCustomFormat);
                         break;
                     case (int)TypeCode.DateTime:
-                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, DateTime?>(property, rowIndex), strColumnCustomFormat, GridPropertyHelper.RetrieveHtmlAttributes(property));
+                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, DateTime?>(property, rowIndex), strColumnCustomFormat);
                         break;
                     case (int)TypeCode.Boolean:
-                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, bool?>(property, rowIndex), strColumnCustomFormat, GridPropertyHelper.RetrieveHtmlAttributes(property));
+                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, bool?>(property, rowIndex), strColumnCustomFormat);
                         break;
                 }
             }
@@ -220,22 +220,22 @@ namespace AmmarCSE.RazorGrid.Helpers
                 switch (typeCode)
                 {
                     case (int)TypeCode.String:
-                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, string>(property, rowIndex), strColumnCustomFormat, GridPropertyHelper.RetrieveHtmlAttributes(property));
+                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, string>(property, rowIndex), strColumnCustomFormat);
                         break;
                     case (int)TypeCode.Int32:
-                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, int>(property, rowIndex), strColumnCustomFormat, GridPropertyHelper.RetrieveHtmlAttributes(property));
+                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, int>(property, rowIndex), strColumnCustomFormat);
                         break;
                     case (int)TypeCode.Int64:
-                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, long>(property, rowIndex), strColumnCustomFormat, GridPropertyHelper.RetrieveHtmlAttributes(property));
+                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, long>(property, rowIndex), strColumnCustomFormat);
                         break;
                     case (int)TypeCode.Decimal:
-                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, decimal>(property, rowIndex), strColumnCustomFormat, GridPropertyHelper.RetrieveHtmlAttributes(property));
+                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, decimal>(property, rowIndex), strColumnCustomFormat);
                         break;
                     case (int)TypeCode.DateTime:
-                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, DateTime>(property, rowIndex), strColumnCustomFormat, GridPropertyHelper.RetrieveHtmlAttributes(property));
+                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, DateTime>(property, rowIndex), strColumnCustomFormat);
                         break;
                     case (int)TypeCode.Boolean:
-                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, bool>(property, rowIndex), strColumnCustomFormat, GridPropertyHelper.RetrieveHtmlAttributes(property));
+                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, bool>(property, rowIndex), strColumnCustomFormat);
                         break;
                     case (int)TypeCode.Object:
                         string textBoxValue = string.Empty;
@@ -248,10 +248,10 @@ namespace AmmarCSE.RazorGrid.Helpers
                                 (IEnumerable<string>)Data[rowIndex].GetType().GetProperty(property.Name).GetValue(Data[rowIndex]));
                         }
 
-                        mvcElement = htmlHelper.TextBox(property.Name, textBoxValue, strColumnCustomFormat, GridPropertyHelper.RetrieveHtmlAttributes(property));
+                        mvcElement = htmlHelper.TextBox(property.Name, textBoxValue, strColumnCustomFormat);
                         break;
                     case 17: // 17 is for timespan which was removed from .net - http://stackoverflow.com/questions/7329834/what-happened-to-system-typecode-of-value-17
-                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, TimeSpan>(property, rowIndex), strColumnCustomFormat, GridPropertyHelper.RetrieveHtmlAttributes(property));
+                        mvcElement = htmlHelper.TextBoxFor(GridExpressionHelper.GenerateExpression<TModel, TimeSpan>(property, rowIndex), strColumnCustomFormat);
                         break;
                 }
             }
@@ -287,19 +287,19 @@ namespace AmmarCSE.RazorGrid.Helpers
                 switch (typeCode)
                 {
                     case (int)TypeCode.Int32:
-                        mvcElement = htmlHelper.HiddenFor(GridExpressionHelper.GenerateExpression<TModel, int?>(property, rowIndex), GridPropertyHelper.RetrieveHtmlAttributes(property));
+                        mvcElement = htmlHelper.HiddenFor(GridExpressionHelper.GenerateExpression<TModel, int?>(property, rowIndex));
                         break;
                     case (int)TypeCode.Int64:
-                        mvcElement = htmlHelper.HiddenFor(GridExpressionHelper.GenerateExpression<TModel, long?>(property, rowIndex), GridPropertyHelper.RetrieveHtmlAttributes(property));
+                        mvcElement = htmlHelper.HiddenFor(GridExpressionHelper.GenerateExpression<TModel, long?>(property, rowIndex));
                         break;
                     case (int)TypeCode.Decimal:
-                        mvcElement = htmlHelper.HiddenFor(GridExpressionHelper.GenerateExpression<TModel, decimal?>(property, rowIndex), GridPropertyHelper.RetrieveHtmlAttributes(property));
+                        mvcElement = htmlHelper.HiddenFor(GridExpressionHelper.GenerateExpression<TModel, decimal?>(property, rowIndex));
                         break;
                     case (int)TypeCode.DateTime:
-                        mvcElement = htmlHelper.HiddenFor(GridExpressionHelper.GenerateExpression<TModel, DateTime?>(property, rowIndex), GridPropertyHelper.RetrieveHtmlAttributes(property));
+                        mvcElement = htmlHelper.HiddenFor(GridExpressionHelper.GenerateExpression<TModel, DateTime?>(property, rowIndex));
                         break;
                     case (int)TypeCode.Boolean:
-                        mvcElement = htmlHelper.HiddenFor(GridExpressionHelper.GenerateExpression<TModel, bool?>(property, rowIndex), GridPropertyHelper.RetrieveHtmlAttributes(property));
+                        mvcElement = htmlHelper.HiddenFor(GridExpressionHelper.GenerateExpression<TModel, bool?>(property, rowIndex));
                         break;
                 }
             }
@@ -308,25 +308,25 @@ namespace AmmarCSE.RazorGrid.Helpers
                 switch (typeCode)
                 {
                     case (int)TypeCode.String:
-                        mvcElement = htmlHelper.HiddenFor(GridExpressionHelper.GenerateExpression<TModel, string>(property, rowIndex), GridPropertyHelper.RetrieveHtmlAttributes(property));
+                        mvcElement = htmlHelper.HiddenFor(GridExpressionHelper.GenerateExpression<TModel, string>(property, rowIndex));
                         break;
                     case (int)TypeCode.Int32:
-                        mvcElement = htmlHelper.HiddenFor(GridExpressionHelper.GenerateExpression<TModel, int>(property, rowIndex), GridPropertyHelper.RetrieveHtmlAttributes(property));
+                        mvcElement = htmlHelper.HiddenFor(GridExpressionHelper.GenerateExpression<TModel, int>(property, rowIndex));
                         break;
                     case (int)TypeCode.Int64:
-                        mvcElement = htmlHelper.HiddenFor(GridExpressionHelper.GenerateExpression<TModel, long>(property, rowIndex), GridPropertyHelper.RetrieveHtmlAttributes(property));
+                        mvcElement = htmlHelper.HiddenFor(GridExpressionHelper.GenerateExpression<TModel, long>(property, rowIndex));
                         break;
                     case (int)TypeCode.Decimal:
-                        mvcElement = htmlHelper.HiddenFor(GridExpressionHelper.GenerateExpression<TModel, decimal>(property, rowIndex), GridPropertyHelper.RetrieveHtmlAttributes(property));
+                        mvcElement = htmlHelper.HiddenFor(GridExpressionHelper.GenerateExpression<TModel, decimal>(property, rowIndex));
                         break;
                     case (int)TypeCode.DateTime:
-                        mvcElement = htmlHelper.HiddenFor(GridExpressionHelper.GenerateExpression<TModel, DateTime>(property, rowIndex), GridPropertyHelper.RetrieveHtmlAttributes(property));
+                        mvcElement = htmlHelper.HiddenFor(GridExpressionHelper.GenerateExpression<TModel, DateTime>(property, rowIndex));
                         break;
                     case (int)TypeCode.Boolean:
-                        mvcElement = htmlHelper.HiddenFor(GridExpressionHelper.GenerateExpression<TModel, bool>(property, rowIndex), GridPropertyHelper.RetrieveHtmlAttributes(property));
+                        mvcElement = htmlHelper.HiddenFor(GridExpressionHelper.GenerateExpression<TModel, bool>(property, rowIndex));
                         break;
                     case 17: // 17 is for timespan which was removed from .net - http://stackoverflow.com/questions/7329834/what-happened-to-system-typecode-of-value-17
-                        mvcElement = htmlHelper.HiddenFor(GridExpressionHelper.GenerateExpression<TModel, TimeSpan>(property, rowIndex), GridPropertyHelper.RetrieveHtmlAttributes(property));
+                        mvcElement = htmlHelper.HiddenFor(GridExpressionHelper.GenerateExpression<TModel, TimeSpan>(property, rowIndex));
                         break;
                 }
             }

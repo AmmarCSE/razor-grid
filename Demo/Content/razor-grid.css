@@ -1,6 +1,9 @@
 ﻿.grid {
-    display: inline-block;
+    display: block;
     width: 80%;
+    margin:auto;
+    margin-top:50px;
+    font-family: Helvetica, Arial, sans-serif;
 }
 
     .grid input {
@@ -20,13 +23,22 @@
         border: none;
     }
 
+.gridRowVisibleCell {
+    display:inline-block;
+    border-left: 1px solid #DBDBDB;
+}
+
+.gridRow:last-child .gridRowVisibleCell {
+    border-bottom: 2px solid #DBDBDB;
+}
+
 .grid input {
     resize: none;
     border-radius: 0px;
     padding-top: 10px !important;
     padding-bottom: 10px !important;
     padding-left: 7px;
-    margin-right: -7px;
+    width: 100%;
 }
 
 .gridAdd {
@@ -70,21 +82,19 @@
 
 .gridHeader div label, .actionColumn label {
     position: relative;
-    top: 7px;
-    line-height: 15px;
+    /*top: 7px; line-height: 15px;*/
+    line-height:40px;
 }
 
 .gridHeader div label, .actionColumn {
-    font-weight: bold;
+    /*font-weight: bold;*/
 }
 
 .gridRow:nth-child(even) input, .gridRow:nth-child(even) .gridRowCheckBox, .gridRow:nth-child(even) .actionColumn {
-    border-left: 1px solid #DBDBDB;
     background: #FFF;
 }
 
 .gridRow:nth-child(odd) input, .gridRow:nth-child(odd) .gridRowCheckBox, .gridRow:nth-child(odd) .actionColumn {
-    border-left: 1px solid #DBDBDB;
     background: #F1F1F1;
 }
 
@@ -158,7 +168,6 @@ input[name="CheckBox"], input[name="triggerToggleAll"] {
     display: inline-block;
     width: 100%;
     margin-bottom: 10px;
-    border-bottom: 2px solid #DBDBDB;
 }
 
 .grid .pager {

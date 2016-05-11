@@ -276,7 +276,7 @@ namespace AmmarCSE.RazorGrid.Core
 
                     rowBuilder.Append(
                         GridTagHelper.WrapInElement(
-                            "div", htmlHelper.TextBoxElement(field, i, Data).ToString(), false, strClasses));
+                            "div", htmlHelper.TextBoxElement(field, i, Data).ToString(), false, strClasses, GridPropertyHelper.RetrieveHtmlAttributes(field)));
                 }
 
                 if (gridPermissions.Contains(GridEnums.GridPermission.Delete)
