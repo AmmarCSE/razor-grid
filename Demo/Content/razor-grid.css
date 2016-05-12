@@ -98,6 +98,19 @@
     background: #F1F1F1;
 }
 
+.gridHeader div:first-child {
+    border-radius: 5px 0 0 0;
+}
+.gridHeader div:last-child {
+    border-radius: 0 5px 0 0;
+}
+.gridRow:last-child .gridRowVisibleCell:first-child {
+    border-radius: 0 0 0 5px;
+}
+.gridRow:last-child .gridRowVisibleCell:last-child {
+    border-radius: 0 0 5px 0;
+}
+
 .gridRowCheckBox, .ToggleAll, .actionColumn {
     width: 4%;
     height: 40px;
