@@ -11,8 +11,6 @@ using System.Web;
 
 namespace AmmarCSE.RazorGrid.Helpers
 {
-    // Summary:
-    //     Represents support for the HTML label element in an ASP.NET MVC view.
     public static class GridExpressionHelper
     {
         public static Expression<Func<TModel, TProperty>> GenerateHeaderExpression<TModel, TProperty>(PropertyInfo property)

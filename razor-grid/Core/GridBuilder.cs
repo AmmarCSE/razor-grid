@@ -18,28 +18,6 @@ namespace AmmarCSE.RazorGrid.Core
 {
     public static class GridBuilder
     {
-        /// <summary>
-        /// The build grid.
-        /// </summary>
-        /// <param name="htmlHelper">
-        /// The html helper.
-        /// </param>
-        /// <param name="gridExpression">
-        /// The grid expression.
-        /// </param>
-        /// <param name="gridPermissions">
-        /// The grid permissions.
-        /// </param>
-        /// <param name="isSearch">
-        /// The is search.
-        /// </param>
-        /// <typeparam name="TModel">
-        /// </typeparam>
-        /// <typeparam name="TGridModel">
-        /// </typeparam>
-        /// <returns>
-        /// The <see cref="MvcHtmlString"/>.
-        /// </returns>
         public static MvcHtmlString BuildGrid<TModel, TGridModel>(
             this HtmlHelper<TModel> htmlHelper,
             Expression<Func<TModel, List<TGridModel>>> gridExpression,
@@ -70,22 +48,15 @@ namespace AmmarCSE.RazorGrid.Core
             }
 
             string grid = GridTagHelper.WrapInElement(
-                "form", builder.ToString(), false, "grid", GridPropertyHelper.RetrieveActionAttributes<TGridModel>());
+                "form",
+                builder.ToString(),
+                false,
+                "grid",
+                GridPropertyHelper.RetrieveActionAttributes<TGridModel>());
+
             return MvcHtmlString.Create(grid);
         }
 
-        /// <summary>
-        /// The construct action bar.
-        /// </summary>
-        /// <param name="gridPermissions">
-        /// The grid permissions.
-        /// </param>
-        /// <param name="pageCount">
-        /// The page count.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
         private static string ConstructActionBar(List<GridEnums.GridPermission> gridPermissions, int pageCount)
         {
             StringBuilder builder = new StringBuilder();
@@ -139,20 +110,6 @@ namespace AmmarCSE.RazorGrid.Core
             return GridTagHelper.WrapInElement("div", builder.ToString(), false);
         }
 
-        /// <summary>
-        /// The construct validation messages.
-        /// </summary>
-        /// <param name="htmlHelper">
-        /// The html helper.
-        /// </param>
-        /// <param name="properties">
-        /// The properties.
-        /// </param>
-        /// <typeparam name="TModel">
-        /// </typeparam>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
         private static string ConstructValidationMessages<TModel>(this HtmlHelper<TModel> htmlHelper, IList<PropertyInfo> properties)
         {
             StringBuilder builder = new StringBuilder();
@@ -166,23 +123,6 @@ namespace AmmarCSE.RazorGrid.Core
             return builder.ToString();
         }
 
-        /// <summary>
-        /// The construct headers.
-        /// </summary>
-        /// <param name="htmlHelper">
-        /// The html helper.
-        /// </param>
-        /// <param name="properties">
-        /// The properties.
-        /// </param>
-        /// <param name="gridPermissions">
-        /// The grid permissions.
-        /// </param>
-        /// <typeparam name="TModel">
-        /// </typeparam>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
         private static string ConstructHeaders<TModel>(this HtmlHelper<TModel> htmlHelper, IList<PropertyInfo> properties, List<GridEnums.GridPermission> gridPermissions)
         {
             StringBuilder builder = new StringBuilder();
@@ -216,28 +156,6 @@ namespace AmmarCSE.RazorGrid.Core
             return GridTagHelper.WrapInElement("div", builder.ToString(), false, "gridHeader");
         }
 
-        /// <summary>
-        /// The construct body.
-        /// </summary>
-        /// <param name="htmlHelper">
-        /// The html helper.
-        /// </param>
-        /// <param name="properties">
-        /// The properties.
-        /// </param>
-        /// <param name="Data">
-        /// The data.
-        /// </param>
-        /// <param name="gridPermissions">
-        /// The grid permissions.
-        /// </param>
-        /// <typeparam name="TModel">
-        /// </typeparam>
-        /// <typeparam name="TGridModel">
-        /// </typeparam>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
         private static string ConstructBody<TModel, TGridModel>(
             this HtmlHelper<TModel> htmlHelper,
             IList<PropertyInfo> properties,
@@ -316,15 +234,6 @@ namespace AmmarCSE.RazorGrid.Core
             return GridTagHelper.WrapInElement("div", bodyBuilder.ToString(), false, "gridBody");
         }
 
-        /// <summary>
-        /// The construct pager.
-        /// </summary>
-        /// <param name="pageCount">
-        /// The page count.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
         private static string ConstructPager(int pageCount)
         {
             StringBuilder pagerBuilder = new StringBuilder();

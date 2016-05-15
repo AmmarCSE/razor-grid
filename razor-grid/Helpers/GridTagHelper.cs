@@ -36,7 +36,12 @@ namespace AmmarCSE.RazorGrid.Helpers
                 htmlAttributes: null);
         }
 
-        public static string WrapInElement(string elementType, string innerHtml, bool appendBreak, string cssClass, Dictionary<string, object> htmlAttributes)
+        public static string WrapInElement(
+            string elementType, 
+            string innerHtml, 
+            bool appendBreak, 
+            string cssClass,
+            Dictionary<string, object> htmlAttributes)
         {
             return WrapInElementHelper(elementType: elementType, 
                 innerHtml: innerHtml,
@@ -45,7 +50,11 @@ namespace AmmarCSE.RazorGrid.Helpers
                 htmlAttributes: htmlAttributes);
         }
 
-        public static string WrapInElementHelper(string elementType, string innerHtml, bool appendBreak, string cssClass, Dictionary<string, object> htmlAttributes)
+        public static string WrapInElementHelper(string elementType,
+            string innerHtml,
+            bool appendBreak,
+            string cssClass,
+            Dictionary<string, object> htmlAttributes)
         {
             TagBuilder tagBuilder = new TagBuilder(elementType);
             tagBuilder.InnerHtml = innerHtml;

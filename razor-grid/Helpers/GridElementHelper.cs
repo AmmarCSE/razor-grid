@@ -15,20 +15,6 @@ namespace AmmarCSE.RazorGrid.Helpers
 {
     public static class GridElementHelper
     {
-        /// <summary>
-        /// The validation element.
-        /// </summary>
-        /// <param name="htmlHelper">
-        /// The html helper.
-        /// </param>
-        /// <param name="property">
-        /// The property.
-        /// </param>
-        /// <typeparam name="TModel">
-        /// </typeparam>
-        /// <returns>
-        /// The <see cref="MvcHtmlString"/>.
-        /// </returns>
         public static MvcHtmlString ValidationElement<TModel>(this HtmlHelper<TModel> htmlHelper, PropertyInfo property)
         {
             bool isNullable;
@@ -90,20 +76,6 @@ namespace AmmarCSE.RazorGrid.Helpers
             return mvcElement;
         }
 
-        /// <summary>
-        /// The label element.
-        /// </summary>
-        /// <param name="htmlHelper">
-        /// The html helper.
-        /// </param>
-        /// <param name="property">
-        /// The property.
-        /// </param>
-        /// <typeparam name="TModel">
-        /// </typeparam>
-        /// <returns>
-        /// The <see cref="MvcHtmlString"/>.
-        /// </returns>
         public static MvcHtmlString LabelElement<TModel>(this HtmlHelper<TModel> htmlHelper, PropertyInfo property)
         {
             bool isNullable;
@@ -165,28 +137,6 @@ namespace AmmarCSE.RazorGrid.Helpers
             return mvcElement;
         }
 
-        /// <summary>
-        /// The text box element.
-        /// </summary>
-        /// <param name="htmlHelper">
-        /// The html helper.
-        /// </param>
-        /// <param name="property">
-        /// The property.
-        /// </param>
-        /// <param name="rowIndex">
-        /// The row index.
-        /// </param>
-        /// <param name="Data">
-        /// The data.
-        /// </param>
-        /// <typeparam name="TModel">
-        /// </typeparam>
-        /// <typeparam name="TGridModel">
-        /// </typeparam>
-        /// <returns>
-        /// The <see cref="MvcHtmlString"/>.
-        /// </returns>
         public static MvcHtmlString TextBoxElement<TModel, TGridModel>(this HtmlHelper<TModel> htmlHelper, PropertyInfo property, int rowIndex, IList<TGridModel> Data)
         {
             bool isNullable;
@@ -259,23 +209,6 @@ namespace AmmarCSE.RazorGrid.Helpers
             return mvcElement;
         }
 
-        /// <summary>
-        /// The key element.
-        /// </summary>
-        /// <param name="htmlHelper">
-        /// The html helper.
-        /// </param>
-        /// <param name="property">
-        /// The property.
-        /// </param>
-        /// <param name="rowIndex">
-        /// The row index.
-        /// </param>
-        /// <typeparam name="TModel">
-        /// </typeparam>
-        /// <returns>
-        /// The <see cref="MvcHtmlString"/>.
-        /// </returns>
         public static MvcHtmlString KeyElement<TModel>(this HtmlHelper<TModel> htmlHelper, PropertyInfo property, int rowIndex)
         {
             bool isNullable;
